@@ -1,0 +1,45 @@
+homeassistant:
+  customize: !include customize.yaml
+  external_url: !secret external_url
+  internal_url: !secret internal_url
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+light: !include_dir_list lights
+binary_sensor: !include_dir_list binary_sensors
+cover: !include_dir_list covers
+
+homekit: !include homekit.yaml
+
+
+notify:
+  - name: brady_holly_iphones
+    platform: group
+    services:
+      - service: mobile_app_bradys_iphone
+      - service: mobile_app_holly_iphone
+
+recorder:
+  db_url: !secret database_pass
+
+media_player:
+  - platform: onkyo
+    host: 10.1.1.115
+    name: brady office receiver
+    sources:
+      pc: Computer
+      game: Switch
+      bd-dvd: Playstation
+      cd: Sonos
+
+logger:
+  default: warning
