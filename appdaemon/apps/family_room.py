@@ -1,13 +1,12 @@
 import appdaemon.plugins.hass.hassapi as hass
 
-class Basement(hass.Hass):
+class FamilyRoom(hass.Hass):
   
 	def initialize(self):
 		family_room_scene = None
 		#self.listen_state(self.basement_lights, "light.basement_stairs")
 		#self.listen_state(self.family_room_scene,"input_select.family_room_scene", old="Set a scene...")
 		#self.listen_state(self.cancel_scene,"input_boolean.appdaemon_debug")
-		pass
 
 	def family_room_scene(self, entity, attribute, old, new, kwargs):
 	
@@ -27,9 +26,6 @@ class Basement(hass.Hass):
 		self.family_room_scene.cancel()
 
 	async def scene_family_room_watch_tv(self):	
-	
-		self.log(f"scene status is {self.family_room_scene}")
-		self.log("Section 1")
 		
 		self.turn_off(entity_id="switch.kitchen_closet_light")
 		self.turn_off(entity_id="light.kitchen_island_lights",transition=7)
@@ -37,7 +33,6 @@ class Basement(hass.Hass):
 		self.turn_on(entity_id="light.kitchen_main_lights",brightness=100,transition=10)
 		self.turn_on(entity_id="light.family_room_bookshelf_huegroup",brightness=150,transition=10,color_name="royalblue")
 		await self.sleep(10)
-		self.log("Section 2 - don't see")
 		self.turn_on(entity_id="light.family_room_window",brightness=255,transition=10,kelvin=3000)
 		self.turn_on(entity_id="light.family_room_couch",brightness=255,transition=10,kelvin=3000)
 		self.turn_on(entity_id="light.family_room_end_table",brightness=255,transition=10,kelvin=3000)

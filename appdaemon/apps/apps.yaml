@@ -10,9 +10,9 @@ emerson_bedroom:
   module: emerson_bedroom
   class: EmersonBedroom
 
-basement:
-  module: basement
-  class: Basement
+family_room:
+  module: family_room
+  class: FamilyRoom
 
 foyer:
   module: foyer
