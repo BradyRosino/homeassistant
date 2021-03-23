@@ -1,0 +1,6 @@
+platform: group
+name: kitchen_ceiling
+entities:
+  - light.kitchen_island_lights
+  - light.kitchen_main_lights
+  - light.kitchen_table_lights

@@ -1,0 +1,7 @@
+platform: template
+sensors:
+  people_home:
+    value_template: >-
+      {{ is_state('person.brady', 'home')
+         or is_state('person.holly', 'home')
+         or is_state('input_boolean.presence_guest', 'on') }}

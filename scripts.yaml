@@ -1,0 +1,21 @@
+open_garage:
+  alias: Open garage door if closed
+  sequence:
+  - condition: state
+    entity_id: binary_sensor.garage_cover
+    state: 'off'
+  - service: homeassistant.turn_on
+    entity_id: switch.garage_opener
+close_garage:
+  alias: Close garage door if open
+  sequence:
+  - condition: state
+    entity_id: binary_sensor.garage_cover
+    state: 'on'
+  - service: homeassistant.turn_on
+    entity_id: switch.garage_opener
+stop_garage:
+  alias: Stop garage during open/close
+  sequence:
+  - service: homeassistant.turn_on
+    entity_id: switch.garage_opener

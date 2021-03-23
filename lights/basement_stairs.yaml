@@ -1,0 +1,3 @@
+platform: switch
+name: basement_stairs
+entity_id: switch.basement_stairs_light

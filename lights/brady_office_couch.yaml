@@ -1,0 +1,5 @@
+platform: group
+name: brady_office_couch
+entities:
+  - light.brady_office_couch_left
+  - light.brady_office_couch_right

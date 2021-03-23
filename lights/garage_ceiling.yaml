@@ -1,0 +1,3 @@
+platform: switch
+name: garage_ceiling
+entity_id: switch.garage_ceiling_light

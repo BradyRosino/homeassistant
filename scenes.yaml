@@ -1,0 +1,279 @@
+- id: '1606018873136'
+  name: Brady Office - Late Night
+  entities:
+    light.brady_office_desk:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 158
+      color_temp: 294
+      effect: none
+      friendly_name: Brady Office Desk Light
+      supported_features: 63
+      state: 'on'
+    light.brady_office_couch:
+      min_mireds: 111
+      max_mireds: 400
+      effect_list:
+      - effect_stop
+      - effect_pulse
+      - effect_colorloop
+      brightness: 156
+      hs_color:
+      - 194.994
+      - 99.998
+      rgb_color:
+      - 0
+      - 191
+      - 255
+      xy_color:
+      - 0.146
+      - 0.238
+      entity_id:
+      - light.brady_office_couch_left
+      - light.brady_office_couch_right
+      friendly_name: brady_office_couch
+      icon: mdi:lightbulb-group
+      supported_features: 55
+      state: 'on'
+- id: '1607173620206'
+  name: Family Room - Morning
+  entities:
+    light.family_room_window:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 99
+      color_temp: 363
+      effect: none
+      friendly_name: Family Room Window Light
+      supported_features: 63
+      state: 'on'
+    light.family_room_end_table:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 89
+      color_temp: 363
+      effect: none
+      friendly_name: Family Room End Table
+      supported_features: 63
+      state: 'on'
+    light.family_room_couch:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 107
+      color_temp: 363
+      effect: none
+      friendly_name: Family Room Couch Light
+      supported_features: 63
+      state: 'on'
+    light.bradyoffice_corner:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      friendly_name: family_room_tv_left
+      supported_features: 63
+      state: 'off'
+    light.bradyoffice_bookshelf:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      friendly_name: family_room_tv_right
+      supported_features: 63
+      state: 'off'
+- id: '1607832027083'
+  name: Master Bedroom - Wind Down
+  entities:
+    light.master_bedroom_chair:
+      brightness: 128
+      friendly_name: masterbedroom_chair
+      supported_features: 41
+      state: 'on'
+    light.master_bedroom_holly_nightstand:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 128
+      color_temp: 366
+      effect: none
+      friendly_name: masterbedroom_hollynightstand
+      supported_features: 63
+      state: 'on'
+    light.master_bedroom_brady_nightstand:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 128
+      color_temp: 366
+      effect: none
+      friendly_name: masterbedroom_bradynightstand
+      supported_features: 63
+      state: 'on'
+- id: '1612232424138'
+  name: Family Room - TV
+  entities:
+    light.family_room_couch:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 51
+      color_temp: 366
+      effect: none
+      friendly_name: Family Room Couch Light
+      supported_features: 63
+      state: 'on'
+    light.family_room_window:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 51
+      color_temp: 361
+      effect: none
+      friendly_name: Family Room Window Light
+      supported_features: 63
+      state: 'on'
+    light.family_room_end_table:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 51
+      color_temp: 363
+      effect: none
+      friendly_name: Family Room End Table
+      supported_features: 63
+      state: 'on'
+    light.bradyoffice_corner:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 128
+      hs_color:
+      - 255.059
+      - 100
+      rgb_color:
+      - 64
+      - 0
+      - 255
+      xy_color:
+      - 0.158
+      - 0.05
+      effect: none
+      friendly_name: family_room_tv_left
+      supported_features: 63
+      state: 'on'
+    light.bradyoffice_bookshelf:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 128
+      hs_color:
+      - 255.059
+      - 100
+      rgb_color:
+      - 64
+      - 0
+      - 255
+      xy_color:
+      - 0.158
+      - 0.05
+      effect: none
+      friendly_name: family_room_tv_right
+      supported_features: 63
+      state: 'on'
+    light.kitchen_island_lights:
+      integration_id: 7
+      area_name: Kitchen
+      friendly_name: Kitchen Island Lights
+      supported_features: 33
+      state: 'off'
+- id: '1616183560915'
+  name: Brady Office - Day Work
+  entities:
+    light.brady_office_desk:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      brightness: 255
+      color_temp: 217
+      effect: none
+      friendly_name: Brady Office Desk Light
+      supported_features: 63
+      state: 'on'
+    light.brady_office_couch_left:
+      min_mireds: 111
+      max_mireds: 400
+      effect_list:
+      - effect_colorloop
+      - effect_pulse
+      - effect_stop
+      friendly_name: Brady Office Couch Left
+      supported_features: 55
+      state: 'off'
+    light.brady_office_couch_right:
+      min_mireds: 111
+      max_mireds: 400
+      effect_list:
+      - effect_colorloop
+      - effect_pulse
+      - effect_stop
+      friendly_name: Brady Office Couch Right
+      supported_features: 55
+      state: 'off'
+    media_player.brady_office_receiver:
+      source_list:
+      - Computer
+      - Switch
+      - Playstation
+      - Sonos
+      volume_level: 0.25
+      is_volume_muted: false
+      source: Computer
+      audio_information:
+        format: ''
+        input_frequency: ''
+        input_channels: ''
+        listening_mode: Stereo
+        output_channels: 2.1 ch
+        output_frequency: ''
+      video_information:
+        input_resolution: Unknown
+        input_color_schema: ''
+        input_color_depth: 24bit
+        output_resolution: 1920 x 1080p
+        output_color_schema: RGB
+        output_color_depth: 24bit
+        picture_mode: ''
+      video_out: yes,out
+      friendly_name: brady office receiver
+      supported_features: 20364
+      state: 'on'

@@ -1,0 +1,177 @@
+- id: '1603889259480'
+  alias: Garage Button - Momentary Switch
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: switch.garage_opener
+    to: 'on'
+  condition: []
+  action:
+  - delay: 00:00:01
+  - service: switch.turn_off
+    data: {}
+    entity_id: switch.garage_opener
+  mode: single
+- id: '1613407565160'
+  alias: Test
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 00e275eaff1d530c6a43b4c7ed247e05
+    domain: lutron_caseta
+    type: press
+    subtype: 'on'
+  condition: []
+  action:
+  - type: toggle
+    device_id: e88a9f9f8edbf590d9a531a3b8810d01
+    entity_id: light.brady_office_desk
+    domain: light
+  mode: single
+- id: '1613425654173'
+  alias: Brady Office - Pico - Volume Up
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 00e275eaff1d530c6a43b4c7ed247e05
+    domain: lutron_caseta
+    type: press
+    subtype: raise
+  condition: []
+  action:
+  - service: media_player.volume_up
+    data: {}
+    entity_id: media_player.brady_office_receiver
+  mode: queued
+  max: 10
+- id: '1616166477419'
+  alias: EMERGENCY - Kitchen Refrigerator Water Detected
+  description: ''
+  trigger:
+  - type: moist
+    platform: device
+    device_id: c9f4cccc6d48d24616b478f9cbcfff32
+    entity_id: binary_sensor.kitchen_refrigerator_water_detected
+    domain: binary_sensor
+  condition: []
+  action:
+  - repeat:
+      until:
+      - type: is_not_moist
+        condition: device
+        device_id: c9f4cccc6d48d24616b478f9cbcfff32
+        entity_id: binary_sensor.kitchen_refrigerator_water_detected
+        domain: binary_sensor
+      sequence:
+      - service: notify.brady_holly_iphones
+        data:
+          message: There is a leak detected beneath the kitchen refrigerator! Tell
+            the kids to get a towel, we're going swimming.
+          title: Leak Detected!
+          data:
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 1
+      - delay:
+          hours: 0
+          minutes: 1
+          seconds: 0
+          milliseconds: 0
+  mode: restart
+- id: '1616167403008'
+  alias: ISSUE - Kitchen refrigerator leak sensor battery low
+  description: ''
+  trigger:
+  - platform: time
+    at: '10:00:00'
+  condition:
+  - type: is_bat_low
+    condition: device
+    device_id: c9f4cccc6d48d24616b478f9cbcfff32
+    entity_id: binary_sensor.homeseer_z_wave_plus_leak_sensor_low_battery_level
+    domain: binary_sensor
+  action:
+  - service: notify.mobile_app_bradys_iphone
+    data:
+      title: Low Battery
+      message: Kitchen
+  mode: single
+- id: '1616180962399'
+  alias: Brady Office - Pico - Volume Down
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 00e275eaff1d530c6a43b4c7ed247e05
+    domain: lutron_caseta
+    type: press
+    subtype: lower
+  condition: []
+  action:
+  - service: media_player.volume_down
+    target:
+      entity_id: media_player.brady_office_receiver
+  mode: queued
+  max: 10
+- id: '1616181105190'
+  alias: Brady Office - Pico - Receiver On
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 00e275eaff1d530c6a43b4c7ed247e05
+    domain: lutron_caseta
+    type: press
+    subtype: 'on'
+  condition: []
+  action:
+  - service: media_player.turn_on
+    target:
+      entity_id: media_player.brady_office_receiver
+  - service: media_player.volume_set
+    data:
+      volume_level: 0.25
+    target:
+      entity_id: media_player.brady_office_receiver
+  mode: single
+- id: '1616181125604'
+  alias: Brady Office - Pico - Receiver Off
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 00e275eaff1d530c6a43b4c7ed247e05
+    domain: lutron_caseta
+    type: press
+    subtype: 'off'
+  condition: []
+  action:
+  - service: media_player.turn_off
+    target:
+      entity_id: media_player.brady_office_receiver
+  mode: single
+- id: '1616181511332'
+  alias: Brady Office - Pico - Set Scene
+  description: Favorite button, changes based on time.
+  trigger:
+  - platform: device
+    device_id: 00e275eaff1d530c6a43b4c7ed247e05
+    domain: lutron_caseta
+    type: press
+    subtype: stop
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: sun
+        before: sunset
+        after: sunrise
+      sequence:
+      - service: light.turn_on
+        data:
+          transition: 10
+          kelvin: 4800
+          brightness: 255
+        target:
+          entity_id: light.brady_office_desk
+    default: []
+  mode: single

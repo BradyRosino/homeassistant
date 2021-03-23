@@ -1,0 +1,23 @@
+name: Home Assistant
+filter:
+  include_domains:
+    - light
+    - fan
+    - cover
+  include_entities:
+    - switch.brady_office_speaker
+    - switch.master_bedroom_sound_machine
+    - switch.master_bathroom_shower_fan
+    - switch.emerson_bedroom_floor_fan
+    - switch.family_room_christmas_tree_lights
+    - switch.hadley_bedroom_floor_fan
+    - switch.kitchen_coffee
+    - switch.outside_front_christmas_lights
+    - climate.living_room
+  exclude_entities:
+    - light.brady_office_couch_left
+    - light.brady_office_couch_right
+    - light.master_bedroom_ceiling_fan
+    - light.family_room_ceiling_fan
+  exclude_entity_globs:
+    - light.*_huegroup

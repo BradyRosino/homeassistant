@@ -1,0 +1,3 @@
+platform: switch
+name: basement_exercise
+entity_id: switch.basement_exercise_light

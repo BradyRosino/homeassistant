@@ -1,0 +1,20 @@
+# Ignore folders
+.storage/
+.cloud/
+deps/
+__pycache__/
+tts/
+custom_components/
+www/
+blueprints/
+
+# Ignore wildcards
+*.db
+*.log
+*.pem
+
+#ignore files
+secrets.yaml
+*.DS_Store
+.HA_VERSION
+appdaemon.yaml

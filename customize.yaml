@@ -1,0 +1,4 @@
+switch.masterbedroom_soundmachine:
+  friendly_name: Master Bedroom - Sound Machine
+cover.garage:
+  device_class: garage

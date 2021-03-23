@@ -1,0 +1,19 @@
+presence:
+  module: presence
+  class: Presence
+
+brady_office:
+  module: brady_office
+  class: BradyOffice
+
+emerson_bedroom:
+  module: emerson_bedroom
+  class: EmersonBedroom
+
+basement:
+  module: basement
+  class: Basement
+
+foyer:
+  module: foyer
+  class: Foyer

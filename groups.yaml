@@ -1,0 +1,71 @@
+brady_office:
+  name: Brady Office
+  entities:
+    - light.brady_office_desk
+    - light.brady_office_couch
+    - switch.brady_office_speaker
+emerson_bedroom:
+  name: Emerson Bedroom
+  entities:
+    - light.emerson_bedroom_ceiling
+    - light.emerson_bedroom_dresser
+    - light.emerson_bedroom_nightstand
+    - switch.emerson_bedroom_floor_fan
+master_bedroom:
+  name: Master Bedroom
+  entities:
+    - light.master_bedroom_brady_nightstand
+    - light.master_bedroom_holly_nightstand
+    - switch.master_bedroom_ceiling_light
+    - switch.master_bedroom_sound_machine
+    - light.master_bedroom_closet
+    - light.master_bedroom_ceiling_fan
+    - light.master_bathroom_mirror
+    - light.master_bathroom_bath
+    - switch.master_bathroom_shower_light
+    - switch.master_bedroom_shower_fan
+    - switch.master_bedroom_hallway_light
+family_room_lights:
+  name: Family Room Lights
+  entities:
+    - light.family_room_couch
+    - light.family_room_end_table
+    - light.family_room_window
+    - light.family_room_bookshelf_huegroup
+family_room:
+  name: Family Room
+  entities:
+    - light.family_room_couch
+    - light.family_room_end_table
+    - light.family_room_window
+    - light.family_room_bookshelf_huegroup
+    - media_player.family_room_tv
+    - switch.family_room_christmas_tree_lights
+kitchen:
+  name: Kitchen
+  entities:
+    - light.kitchen_island_lights
+    - light.kitchen_main_lights
+    - light.kitchen_table_lights
+    - switch.kitchen_closet_light
+basement:
+  name: Basement
+  entities:
+    - switch.basement_stairs_light
+    - switch.basement_exercise_light
+    - switch.basement_play_light
+holly_office:
+  name: Holly Office
+  entities:
+    - switch.holly_office_ceiling_light
+    - fan.holly_office_ceiling
+hadley_bedroom:
+  name: Hadley Bedroom
+  entities:
+    - switch.hadley_bedroom_ceiling_light
+    - light.hadley_bedroom_nightstand
+    - switch.hadley_bedroom_floor_fan
+dining_room:
+  name: Dining Room
+  entities:
+    - light.dining_room_table
