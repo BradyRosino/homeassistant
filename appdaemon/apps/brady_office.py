@@ -29,8 +29,6 @@ class BradyOffice(hass.Hass):
       
 
   def lutron_event(self,event_name, data, kwargs):
-  
-    self.log(data)
 
     if data["button_number"] == 3: # FAVORITE
 
