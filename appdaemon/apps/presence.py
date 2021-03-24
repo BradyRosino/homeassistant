@@ -50,7 +50,7 @@ class Presence(hass.Hass):
     self.call_service("climate/set_preset_mode", entity_id = "climate.living_room", preset_mode = "away")
     self.call_service("light/turn_off", entity_id = "all")
     self.call_service("fan/turn_off", entity_id = "all")
-    self.call_service("media_player/turn_off", entity_id = "all")
+    self.call_service("media_player/turn_off", entity_id = "media_player.brady_office_receiver")
     self.turn_off("switch.emerson_bedroom_floor_fan")
     self.turn_off("switch.hadley_bedroom_floor_fan")
     self.turn_off("switch.master_bathroom_shower_fan")
