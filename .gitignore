@@ -17,4 +17,3 @@ blueprints/
 secrets.yaml
 *.DS_Store
 .HA_VERSION
-appdaemon.yaml
