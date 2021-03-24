@@ -7,6 +7,7 @@ tts/
 custom_components/
 www/
 blueprints/
+.vscode/
 
 # Ignore wildcards
 *.db
