@@ -47,8 +47,6 @@ def civil_dawn():
 	
 	if switch.outside_driveway_light == "on":
 		switch.turn_off(entity_id="switch.outside_driveway_light")
-	
-	notify.mobile_app_bradys_iphone(title="Pyscript Debug", message=f"Civil dawn has arrived ({sun.sun.elevation}). Driveway lights turned off.")
 
 
 
@@ -64,5 +62,3 @@ def civil_dusk():
 	
 	if switch.outside_driveway_light == "off":
 		switch.turn_on(entity_id="switch.outside_driveway_light")
-
-	notify.mobile_app_bradys_iphone(title="Pyscript Debug", message=f"Civil dusk has arrived ({sun.sun.elevation}). Driveway lights turned on.")
