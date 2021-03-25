@@ -12,19 +12,16 @@ class TimedEvents(hass.Hass):
 	def initialize(self):
 		
 		"""Weekdays @ 6:30 AM"""
-		time = datetime.time(6, 30, 0)
-		self.run_daily(self.master_wakeup_call, time, constrain_days = "mon,tue,wed,thu,fri")
+		self.run_daily(self.master_wakeup_call, "06:30:00", constrain_days = "mon,tue,wed,thu,fri")
 
+		"""Daily @ 6:00 PM"""
+		self.run_daily(self.evening_coffee_reset, "18:00:00")
 
-		"""Turn off coffee maker if it will no longer be used"""
-		time = datetime.time(18, 0, 0)
-		self.run_daily(self.evening_coffee_reset, time)
+		"""Civil Dusk"""
+		self.run_daily(self.sunset,"sunset + 00:30:00")
 
-		"""30 Min After Sunset"""
-		self.run_at_sunset(self.sunset, offset=1800)
-
-		"""60 Min Before Sunrise"""
-		self.run_at_sunrise(self.sunrise, offset=-3600)
+		"""Civil Dawn"""
+		self.run_daily(self.sunrise,"sunrise - 00:30:00")
 
 
 #######################################
