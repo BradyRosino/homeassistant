@@ -11,16 +11,34 @@ import appdaemon.plugins.hass.hassapi as hass
 class EmersonBedroom(hass.Hass):
 
   def initialize(self):
-    #listen_entity = self.args['listen_entity']
     
-    #self.timer_library = {}
-    
-    #self.listen_event(self.zwave_scene_activated, "ozw.scene_activated", node_id=47)
-    #self.listen_state(self.emerson_door_changed, "binary_sensor.emerson_bedroom_door")
-    #self.listen_state(self.button_changed, "sensor.emerson_bedroom_button_action")
-    self.listen_state(self.door_changed, "binary_sensor.emerson_bedroom_door")
-    self.listen_state(self.door_timeout, "binary_sensor.emerson_bedroom_door", new='on', duration = 1800)
+    door_timer = None
+  
+    #self.listen_state(self.door_changed, "binary_sensor.emerson_bedroom_door")
     self.listen_event(self.zwave_event, "zwave_js_event", node_id=47,)
+
+  def door_changed(self, entity, attribute, old, new, kwargs):
+    
+    # Cancel timer, if running
+    try:
+      self.door_timer.cancel()
+    except:
+      """Tried to cancel, but no timer was running"""
+      pass
+
+    # Do nothing if a guest is present
+    if self.get_state("input_boolean.emerson_bedroom_guest") == "on":
+      return
+    
+    # Take action
+    if new == "on":
+      self.turn_on("light.emerson_bedroom_nightstand", brightness = 100, color_temp = 348, transition=3)
+      self.door_timer = self.run_in(self.door_timeout,1800)
+    elif new == "off":
+      self.turn_on("switch.emerson_bedroom_floor_fan")
+      self.turn_off("light.emerson_bedroom_dresser")
+      self.turn_off("switch.emerson_bedroom_ceiling_light")
+      self.turn_off("light.emerson_bedroom_nightstand")
 
   def door_timeout(self, entity, attribute, old, new, kwargs):
 
@@ -29,23 +47,6 @@ class EmersonBedroom(hass.Hass):
       return
     
     self.call_service("notify/mobile_app_bradys_iphone", title = "DEBUG", message = "Emerson bedroom door timeout")
-
-
-
-  def door_changed(self, entity, attribute, old, new, kwargs):
-    
-    # See Do nothing if a guest is present
-    if self.get_state("input_boolean.emerson_bedroom_guest") == "on":
-      return
-    
-    if new == "on":
-      self.turn_on("light.emerson_bedroom_nightstand", brightness = 100, color_temp = 348, transition=3)
-    elif new == "off":
-      self.turn_on("switch.emerson_bedroom_floor_fan")
-      self.turn_off("light.emerson_bedroom_dresser")
-      self.turn_off("switch.emerson_bedroom_ceiling_light")
-      self.turn_off("light.emerson_bedroom_nightstand")
-
 
   def zwave_event(self,event_name, data, kwargs):
 
