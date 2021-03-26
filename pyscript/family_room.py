@@ -13,6 +13,11 @@ def scene_family_room(value):
 	    light.turn_on(entity_id="light.family_room_end_table",brightness=255,transition=3,kelvin=3500)
 	    task.sleep(3)
 	    light.turn_on(entity_id="light.family_room_bookshelf_huegroup",brightness=255,transition=3,kelvin=3500)
+    
+    elif value == "Good Morning":
+
+        light.turn_on(entity_id="light.family_room_window",brightness=100,transition=10,kelvin=2900)
+        light.turn_on(entity_id="light.family_room_end_table",brightness=100,transition=10,kelvin=2900)
 
     elif value == "Watch TV":
     
