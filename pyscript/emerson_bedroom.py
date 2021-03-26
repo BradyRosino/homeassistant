@@ -7,6 +7,10 @@ def door_event(value):
 
     task.unique("emerson_door_event")
 
+    if input_boolean.emerson_bedroom_guest == "on":
+        # Do nothing if guest mode is enabled
+        return
+
     if value == "on":
 
         light.turn_on(entity_id="light.emerson_bedroom_nightstand",kelvin=3000,transition=3,brightness=75)
