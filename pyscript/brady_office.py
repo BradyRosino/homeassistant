@@ -21,7 +21,7 @@ def brady_office_sonos(value,old_value):
 # Handle Brady Office Pico Events
 #######################################
 
-#@event_trigger("lutron_caseta_button_event", "area_name == 'Brady Office' and device_name == 'Pico'")
+@event_trigger("lutron_caseta_button_event", "area_name == 'Brady Office' and device_name == 'Pico'")
 def lutron_event(**kwargs):
     
     """Listen for button release to stop any running loops"""
@@ -55,6 +55,45 @@ def onkyo_volume_adjust(action):
     if action == "volume_up" or action == "volume_down":
         count = 0
         while(count < 20):
-            count = count + 1
+            count += 1
             task.sleep(.3)
             service.call("media_player",action, entity_id="media_player.brady_office_receiver")
+
+
+@state_trigger("sensor.brady_office_cube_action not in ['','wakeup']")
+def brady_office_cube_action(value):
+    """
+    Handle Aqara Cube Actions
+
+    flip90          Flip on side
+    flip180         Flip upside down
+    rotate_right    Rotate on z axis clockwise
+    rotate_left     Rotate on z axis counter clockwise
+    shake           Shake it like a polaroid
+    tap             Double tap on to surface
+    slide           Slide across surface
+    fall            Call life alert
+    """
+
+    log.info(f"kwargs value: {value}")
+
+    if value == "flip90":
+        if sun.sun == "above_horizon":
+            light.turn_on(entity_id="light.brady_office_desk",transition=3,brightness=255,kelvin=4800)
+        else:
+            light.turn_on(entity_id="light.brady_office_desk",transition=10,brightness=255,kelvin=2600)
+
+
+
+    elif value == "rotate_right":
+        if sun.sun == "above_horizon":
+            light.turn_on(entity_id="light.brady_office_desk",transition=3,brightness=255,kelvin=4800)
+        else:
+            light.turn_on(entity_id="light.brady_office_desk",transition=10,brightness=255,kelvin=2600)
+            light.turn_on(entity_id="light.brady_office_couch",transition=10,brightness=200,color_name="blue")
+
+
+    elif value == "rotate_left":
+        light.turn_off(entity_id="light.brady_office_desk",transition=3)
+        light.turn_off(entity_id="light.brady_office_couch",transition=3)
+
