@@ -15,7 +15,18 @@ def morning_nudge():
 			switch.turn_off(entity_id="switch.master_bedroom_sound_machine")
 
 
+#######################################
+# Reminders
+#######################################
 
+@time_trigger("once(08:00:00)")
+def reminders():
+
+	if input_boolean.emerson_bedroom_guest == "on":
+		notify.mobile_app_bradys_iphone(title="Home Reminder",message="Emerson bedroom guest mode is enabled.")
+	
+	if input_boolean.presence_guest == "on":
+		notify.mobile_app_bradys_iphone(title="Home Reminder",message="Guest mode is enabled.")
 
 #######################################
 # Evening Coffee Reset
