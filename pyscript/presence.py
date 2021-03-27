@@ -59,6 +59,7 @@ def home_became_empty():
     for media_player_id in media_player_ids:
         if state.get(media_player_id) in ["on","playing"]:
             log.info(f"House away, turning off {media_player_id}")
+            media_player.media_stop(entity_id=media_player_id)
             media_player.turn_off(entity_id=media_player_id)
     
     fan_ids = state.names(domain="fan")
@@ -74,5 +75,6 @@ def home_became_empty():
 
 def home_became_occupied():
     task.unique("home_status_changed")
+    log.info("Home became occupied")
     notify.mobile_app_bradys_iphone(title="Home Status",message="The home status is now occupied.")
     climate.set_preset_mode(entity_id="climate.living_room",preset_mode="home")
