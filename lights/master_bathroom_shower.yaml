@@ -1,0 +1,3 @@
+platform: switch
+name: master_bathroom_shower
+entity_id: switch.master_bathroom_shower_light

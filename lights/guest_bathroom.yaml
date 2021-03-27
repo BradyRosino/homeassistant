@@ -1,0 +1,3 @@
+platform: switch
+name: guest_bathroom
+entity_id: switch.guest_bathroom_light

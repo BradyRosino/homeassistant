@@ -1,0 +1,3 @@
+platform: switch
+name: master_bedroom_hallway
+entity_id: switch.master_bedroom_hallway_light
