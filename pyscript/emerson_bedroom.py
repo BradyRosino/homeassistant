@@ -43,7 +43,7 @@ def zwave_event(**kwargs):
         light.turn_on(entity_id="light.emerson_bedroom_nightstand", brightness=150, color_name="pink", transition=5)
         light.turn_on(entity_id="light.emerson_bedroom_dresser", brightness=150, color_name="purple", transition=5)
 
-    elif data["property_key"] == "002" and (data["value"] == "KeyHeldDown" or data["value"] == "KeyPressed2x"):
+    elif kwargs["property_key"] == "002" and (kwargs["value"] == "KeyHeldDown" or kwargs["value"] == "KeyPressed2x"):
 
         # UP HELD or UP x2
 
@@ -53,7 +53,7 @@ def zwave_event(**kwargs):
         light.turn_on(entity_id="light.emerson_bedroom_ceiling")
 
 
-    elif data["property_key"] == "001" and (data["value"] == "KeyHeldDown" or data["value"] == "KeyPressed2x"):
+    elif kwargs["property_key"] == "001" and (kwargs["value"] == "KeyHeldDown" or kwargs["value"] == "KeyPressed2x"):
 
         # DOWN HELD or DOWN x2
         light.turn_off(entity_id="light.emerson_bedroom_nightstand", transition=3)
