@@ -1,3 +1,0 @@
-platform: switch
-name: basement_play
-entity_id: switch.basement_play_light
