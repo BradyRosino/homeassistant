@@ -47,6 +47,9 @@ def civil_dawn():
 	
 	if switch.outside_driveway_light == "on":
 		switch.turn_off(entity_id="switch.outside_driveway_light")
+	
+	if light.outside_front_porch == "on":
+		light.turn_off(entity_id="light.outside_front_porch")
 
 
 
@@ -62,3 +65,6 @@ def civil_dusk():
 	
 	if switch.outside_driveway_light == "off":
 		switch.turn_on(entity_id="switch.outside_driveway_light")
+	
+	if light.outside_front_porch == "off":
+		light.turn_on(entity_id="light.outside_front_porch")
