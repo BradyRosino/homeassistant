@@ -11,7 +11,7 @@ def home_status_changed(**kwargs):
         notify.mobile_app_bradys_iphone(title="Guest Mode", message=f"Guest mode is now {guest_mode}")
 
     if people_home == "off" and guest_mode == "off":
-        home_become_empty()
+        home_became_empty()
     elif kwargs["old_value"] == "off" and kwargs["value"] == "on":
         if people_home == "on" and guest_mode == "on":
             # Moved from one on to two on, home status did not change
@@ -44,24 +44,28 @@ def home_became_empty():
 
     for switch_id in include_switches:
         if state.get(switch_id) == "on":
+            log.info(f"House away, turning off {switch_id}")
             homeassistant.turn_off(entity_id=switch_id)
 
     lights = state.names(domain="light")
 
-    for light in lights:
-        if state.get(light) == "on" and light not in exclude_lights:
-            homeassistant.turn_off(entity_id=light)
+    for light_id in lights:
+        if state.get(light_id) == "on" and light_id not in exclude_lights:
+            log.info(f"House away, turning off {light_id}")
+            homeassistant.turn_off(entity_id=light_id)
     
     media_player_ids = state.names(domain="media_player")
 
     for media_player_id in media_player_ids:
         if state.get(media_player_id) in ["on","playing"]:
+            log.info(f"House away, turning off {media_player_id}")
             media_player.turn_off(entity_id=media_player_id)
     
     fan_ids = state.names(domain="fan")
 
     for fan_id in fan_ids:
         if state.get(fan_id) in ["on"]:
+            log.info(f"House away, turning off {fan_id}")
             fan.turn_off(entity_id=fan_id)
 
     if cover.garage == "open":
