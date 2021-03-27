@@ -1,4 +1,4 @@
-@event_trigger("sensor.master_bathroom_shower_humidity")
+@state_trigger("sensor.master_bathroom_shower_humidity")
 def master_bathroom_humidity_changed(value):
 
     if float(value) > 60.00:
