@@ -90,7 +90,7 @@ def brady_office_cube_action(value):
             light.turn_on(entity_id="light.brady_office_desk",transition=3,brightness=255,kelvin=4800)
         else:
             light.turn_on(entity_id="light.brady_office_desk",transition=10,brightness=255,kelvin=2600)
-            light.turn_on(entity_id="light.brady_office_couch",transition=10,brightness=200,color_name="blue")
+            light.turn_on(entity_id="light.brady_office_couch",transition=10,brightness=200,color_name="DarkCyan")
 
 
     elif value == "rotate_left":
