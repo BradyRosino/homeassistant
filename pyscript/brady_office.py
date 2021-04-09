@@ -18,6 +18,15 @@ def brady_office_sonos(value,old_value):
             # Sonos stopped, set back to pc input
             media_player.select_source(entity_id="media_player.brady_office_receiver",source="pc")
 
+
+
+@state_trigger("media_player.brady_office_receiver == 'on'")
+def brady_office_receiver_powered_on():
+
+    if media_player.brady_office_receiver.source == "Sonos" and media_player.brady_office_sonos != "playing":
+        media_player.select_source(entity_id="media_player.brady_office_receiver",source="pc")
+
+
 #######################################
 # Handle Brady Office Pico Events
 #######################################
