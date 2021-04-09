@@ -12,22 +12,6 @@
     data: {}
     entity_id: switch.garage_opener
   mode: single
-- id: '1613407565160'
-  alias: Test
-  description: ''
-  trigger:
-  - platform: device
-    device_id: 00e275eaff1d530c6a43b4c7ed247e05
-    domain: lutron_caseta
-    type: press
-    subtype: 'on'
-  condition: []
-  action:
-  - type: toggle
-    device_id: e88a9f9f8edbf590d9a531a3b8810d01
-    entity_id: light.brady_office_desk
-    domain: light
-  mode: single
 - id: '1613425654173'
   alias: Brady Office - Pico - Volume Up
   description: ''
