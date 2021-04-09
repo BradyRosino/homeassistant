@@ -14,8 +14,9 @@ def brady_office_sonos(value,old_value):
         media_player.select_source(entity_id="media_player.brady_office_receiver",source="cd")
 
     else:
-        # Sonos stopped, set back to pc input
-        media_player.select_source(entity_id="media_player.brady_office_receiver",source="pc")
+        if media_player.brady_office_receiver == "on":
+            # Sonos stopped, set back to pc input
+            media_player.select_source(entity_id="media_player.brady_office_receiver",source="pc")
 
 #######################################
 # Handle Brady Office Pico Events
