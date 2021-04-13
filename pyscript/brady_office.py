@@ -26,6 +26,17 @@ def brady_office_receiver_powered_on():
     if media_player.brady_office_receiver.source == "Sonos" and media_player.brady_office_sonos != "playing":
         media_player.select_source(entity_id="media_player.brady_office_receiver",source="pc")
 
+@state_trigger("media_player.brady_office_receiver.source")
+def brady_office_receiver_source_changed(**kwargs):
+    value = media_player.brady_office_receiver.source
+    log.info(value)
+    if value == "Computer":
+        media_player.volume_set(entity_id="media_player.brady_office_receiver",volume_level=0.5)
+    elif value == "Switch":
+        media_player.volume_set(entity_id="media_player.brady_office_receiver",volume_level=0.3)
+    elif value == "Playstation":
+        media_player.volume_set(entity_id="media_player.brady_office_receiver",volume_level=0.3)
+
 
 #######################################
 # Handle Brady Office Pico Events
