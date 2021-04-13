@@ -69,7 +69,7 @@ def civil_dawn():
 # Daily at Civil Dusk
 #######################################
 
-@time_trigger("once(sunset + 30 min)")
+@time_trigger("once(sunset)")
 def civil_dusk():
 
 	"""Every day at civil dusk, turn on the driveway light"""
