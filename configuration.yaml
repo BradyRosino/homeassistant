@@ -36,9 +36,9 @@ media_player:
     name: brady office receiver
     sources:
       pc: Computer
+      strm-box: Laptop
       game: Switch
       bd-dvd: Playstation
-      cd: Sonos
 
 logger:
   default: warning
