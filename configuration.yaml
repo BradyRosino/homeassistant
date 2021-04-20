@@ -30,15 +30,5 @@ notify:
 recorder:
   db_url: !secret database_pass
 
-media_player:
-  - platform: onkyo
-    host: 10.1.1.115
-    name: brady office receiver
-    sources:
-      pc: Computer
-      strm-box: Laptop
-      game: Switch
-      bd-dvd: Playstation
-
 logger:
   default: warning
