@@ -13,7 +13,6 @@ filter:
     - switch.hadley_bedroom_floor_fan
     - switch.kitchen_coffee
     - switch.outside_front_christmas_lights
-    - climate.living_room
   exclude_entities:
     - light.brady_office_couch_left
     - light.brady_office_couch_right
