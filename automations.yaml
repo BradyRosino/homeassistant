@@ -12,22 +12,6 @@
     data: {}
     entity_id: switch.garage_opener
   mode: single
-- id: '1613425654173'
-  alias: Brady Office - Pico - Volume Up
-  description: ''
-  trigger:
-  - platform: device
-    device_id: 00e275eaff1d530c6a43b4c7ed247e05
-    domain: lutron_caseta
-    type: press
-    subtype: raise
-  condition: []
-  action:
-  - service: media_player.volume_up
-    data: {}
-    entity_id: media_player.brady_office_receiver
-  mode: queued
-  max: 10
 - id: '1616166477419'
   alias: EMERGENCY - Kitchen Refrigerator Water Detected
   description: ''
@@ -82,80 +66,587 @@
       title: Low Battery
       message: Kitchen
   mode: single
-- id: '1616180962399'
-  alias: Brady Office - Pico - Volume Down
+- id: '1623968300024'
+  alias: Time - Sunset
   description: ''
   trigger:
-  - platform: device
-    device_id: 00e275eaff1d530c6a43b4c7ed247e05
-    domain: lutron_caseta
-    type: press
-    subtype: lower
+  - platform: sun
+    event: sunset
   condition: []
   action:
-  - service: media_player.volume_down
-    target:
-      entity_id: media_player.brady_office_receiver
-  mode: queued
-  max: 10
-- id: '1616181105190'
-  alias: Brady Office - Pico - Receiver On
+  - type: turn_on
+    device_id: aabe5b719c16bf7fb28a1cefafa4f638
+    entity_id: switch.outside_driveway_light
+    domain: switch
+  - type: turn_on
+    device_id: 3ad2ff5c0625a224ba7cebc093b39d51
+    entity_id: light.outside_front_porch
+    domain: light
+  mode: single
+- id: '1623968412592'
+  alias: Time - Sunrise (offset -30m)
+  description: Turn off exterior lights at sunrise
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: -00:30:00
+  condition: []
+  action:
+  - type: turn_off
+    device_id: aabe5b719c16bf7fb28a1cefafa4f638
+    entity_id: switch.outside_driveway_light
+    domain: switch
+  - type: turn_off
+    device_id: 3ad2ff5c0625a224ba7cebc093b39d51
+    entity_id: light.outside_front_porch
+    domain: light
+  mode: single
+- id: '1623968513391'
+  alias: Time - Kitchen - Coffee Reset
+  description: Turn off coffee power at 6pm
+  trigger:
+  - platform: time
+    at: '18:00:00'
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 90770ccd18c111eba96cc192cb4bd3c6
+    entity_id: switch.kitchen_coffee
+    domain: switch
+  mode: single
+- id: '1623981445593'
+  alias: Time - Master Bedroom - Wakeup Call
   description: ''
   trigger:
-  - platform: device
-    device_id: 00e275eaff1d530c6a43b4c7ed247e05
-    domain: lutron_caseta
-    type: press
-    subtype: 'on'
+  - platform: time
+    at: input_datetime.master_bedroom_wakeup_time
   condition: []
   action:
-  - service: media_player.turn_on
-    target:
-      entity_id: media_player.brady_office_receiver
-  - service: media_player.volume_set
+  - condition: state
+    entity_id: binary_sensor.people_home
+    state: 'on'
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.master_bedroom_sleep_in
+        state: 'on'
+      sequence:
+      - service: homeassistant.turn_off
+        target:
+          entity_id: input_boolean.master_bedroom_sleep_in
+    default:
+    - service: switch.turn_off
+      target:
+        device_id: 544f9268e3d7d9021d3f36dd7606011e
+    - service: input_datetime.set_datetime
+      target:
+        entity_id: input_datetime.master_bedroom_wakeup_time
+      data:
+        time: '6:30:00'
+  mode: single
+- id: '1623983039999'
+  alias: Time - 8:00 AM - Reminder Emerson Guest Mode On
+  description: ''
+  trigger:
+  - platform: time
+    at: 08:00:00
+  condition:
+  - condition: state
+    entity_id: input_boolean.emerson_bedroom_guest
+    state: 'on'
+  action:
+  - service: notify.mobile_app_bradys_iphone
     data:
-      volume_level: 0.25
-    target:
-      entity_id: media_player.brady_office_receiver
+      message: Emerson bedroom guest mode is enabled.
+      title: Home Reminder
   mode: single
-- id: '1616181125604'
-  alias: Brady Office - Pico - Receiver Off
+- id: '1623983129803'
+  alias: Time - 8:00 AM - Reminder Guest Mode Enabled
+  description: ''
+  trigger:
+  - platform: time
+    at: 08:00:00
+  condition:
+  - condition: state
+    entity_id: input_boolean.presence_guest
+    state: 'on'
+  action:
+  - service: notify.mobile_app_bradys_iphone
+    data:
+      message: Guest mode is enabled.
+      title: Home Reminder
+  mode: single
+- id: '1623983823883'
+  alias: Brady Office - Cube - Rotate Right
   description: ''
   trigger:
   - platform: device
-    device_id: 00e275eaff1d530c6a43b4c7ed247e05
-    domain: lutron_caseta
-    type: press
-    subtype: 'off'
-  condition: []
-  action:
-  - service: media_player.turn_off
-    target:
-      entity_id: media_player.brady_office_receiver
-  mode: single
-- id: '1616181511332'
-  alias: Brady Office - Pico - Set Scene
-  description: Favorite button, changes based on time.
-  trigger:
-  - platform: device
-    device_id: 00e275eaff1d530c6a43b4c7ed247e05
-    domain: lutron_caseta
-    type: press
-    subtype: stop
+    domain: mqtt
+    device_id: 9077998b18c111eb960a27cecc7c5cec
+    type: action
+    subtype: rotate_right
+    discovery_id: 0x00158d00032c9e2d action_rotate_right
   condition: []
   action:
   - choose:
     - conditions:
-      - condition: sun
-        before: sunset
-        after: sunrise
+      - condition: state
+        entity_id: sun.sun
+        state: above_horizon
       sequence:
       - service: light.turn_on
         data:
-          transition: 10
-          kelvin: 4800
+          transition: 3
           brightness: 255
+          kelvin: 4800
         target:
           entity_id: light.brady_office_desk
-    default: []
+    default:
+    - service: light.turn_on
+      target:
+        device_id: e88a9f9f8edbf590d9a531a3b8810d01
+      data:
+        transition: 10
+        kelvin: 2600
+        brightness_pct: 100
+  mode: single
+- id: '1623984001069'
+  alias: Brady Office - Cube - Rotate Left
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 9077998b18c111eb960a27cecc7c5cec
+    type: action
+    subtype: rotate_left
+    discovery_id: 0x00158d00032c9e2d action_rotate_left
+  condition: []
+  action:
+  - service: light.turn_off
+    data:
+      transition: 5
+    target:
+      entity_id: light.brady_office_desk
+  - service: light.turn_off
+    target:
+      entity_id: light.brady_office_couch
+    data:
+      transition: 5
+  mode: single
+- id: '1624013090864'
+  alias: Downstairs Bathroom - Motion
+  description: Turn on bathroom light for 30 minutes on motion
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 907837c418c111ebbb6d91773cfacc14
+    entity_id: binary_sensor.guest_bathroom_motion
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: switch.turn_on
+    target:
+      device_id: b4c7eeefbfbbc9ed647d86634c56811a
+  - delay:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  - service: switch.turn_off
+    target:
+      device_id: b4c7eeefbfbbc9ed647d86634c56811a
+  mode: restart
+- id: '1624013786747'
+  alias: Foyer - Motion - Turn on Island Light
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: f6839462c8fc3aacf38eba487d1f62c1
+    entity_id: binary_sensor.foyer_motion
+    domain: binary_sensor
+  condition:
+  - condition: template
+    value_template: 'value_template: "{{ state_attr(''sun.sun'', ''elevation'') <
+      -6 }}"'
+  - condition: device
+    type: is_off
+    device_id: b5844f5a506359457bd6f5f9b92da167
+    entity_id: light.kitchen_island_lights
+    domain: light
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+      milliseconds: 0
+  action:
+  - type: turn_on
+    device_id: b5844f5a506359457bd6f5f9b92da167
+    entity_id: light.kitchen_island_lights
+    domain: light
+    brightness_pct: 40
+  mode: single
+- id: '1624013955762'
+  alias: Kitchen - Entry Door - Turn on Entry Light
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.kitchen_garage_entry_door
+    to: 'on'
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 12c92d982386e012a24b1ef0cb73cc21
+    entity_id: switch.kitchen_closet_light
+    domain: switch
+  action:
+  - type: turn_on
+    device_id: 12c92d982386e012a24b1ef0cb73cc21
+    entity_id: switch.kitchen_closet_light
+    domain: switch
+  mode: single
+- id: '1624014307772'
+  alias: Garage - Doors (entry or cover) Opened
+  description: ''
+  trigger:
+  - type: turned_on
+    platform: device
+    device_id: 8cc1025c5227abaa702db562a9363506
+    entity_id: binary_sensor.garage_cover
+    domain: binary_sensor
+  - platform: state
+    entity_id: binary_sensor.kitchen_garage_entry_door
+    to: 'on'
+  condition:
+  - condition: template
+    value_template: 'value_template: "{{ state_attr(''sun.sun'', ''elevation'') <
+      -6 }}"'
+  - condition: device
+    type: is_off
+    device_id: 06db30d13e58f7ad02951a3e0a4ce55a
+    entity_id: switch.garage_ceiling_light
+    domain: switch
+  action:
+  - type: turn_on
+    device_id: 06db30d13e58f7ad02951a3e0a4ce55a
+    entity_id: switch.garage_ceiling_light
+    domain: switch
+  mode: single
+- id: '1624014478469'
+  alias: Garage - Doors (entry and cover) Closed
+  description: ''
+  trigger:
+  - type: turned_off
+    platform: device
+    device_id: 8cc1025c5227abaa702db562a9363506
+    entity_id: binary_sensor.garage_cover
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 15
+      seconds: 0
+      milliseconds: 0
+  - platform: state
+    entity_id: binary_sensor.kitchen_garage_entry_door
+    to: 'off'
+    for: 00:15:00
+  condition:
+  - condition: device
+    type: is_on
+    device_id: 06db30d13e58f7ad02951a3e0a4ce55a
+    entity_id: switch.garage_ceiling_light
+    domain: switch
+  action:
+  - type: turn_off
+    device_id: 06db30d13e58f7ad02951a3e0a4ce55a
+    entity_id: switch.garage_ceiling_light
+    domain: switch
+  mode: restart
+- id: '1624014899053'
+  alias: Garage Open while sun is down
+  description: ''
+  trigger:
+  - type: turned_on
+    platform: device
+    device_id: 8cc1025c5227abaa702db562a9363506
+    entity_id: binary_sensor.garage_cover
+    domain: binary_sensor
+  - platform: sun
+    event: sunset
+  condition:
+  - type: is_on
+    condition: device
+    device_id: 8cc1025c5227abaa702db562a9363506
+    entity_id: binary_sensor.garage_cover
+    domain: binary_sensor
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  action:
+  - repeat:
+      until:
+      - type: is_off
+        condition: device
+        device_id: 8cc1025c5227abaa702db562a9363506
+        entity_id: binary_sensor.garage_cover
+        domain: binary_sensor
+      sequence:
+      - service: notify.mobile_app_bradys_iphone
+        data:
+          message: Garage is open and it is night.
+          title: Garage Alert
+      - delay:
+          hours: 0
+          minutes: 15
+          seconds: 0
+          milliseconds: 0
+  mode: restart
+- id: '1624018110355'
+  alias: Hadley Bedroom - Door Opened
+  description: ''
+  trigger:
+  - type: turned_on
+    platform: device
+    device_id: d6d7286c723a9d242b1ec4f8ab481bb2
+    entity_id: binary_sensor.hadley_bedroom_door
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: light.turn_on
+    target:
+      entity_id: light.hadley_bedroom_nightstand
+    data:
+      transition: 3
+      kelvin: 3000
+      brightness: 75
+  mode: restart
+- id: '1624018352517'
+  alias: Hadley Bedroom - Door open for 30 minutes
+  description: ''
+  trigger:
+  - type: turned_on
+    platform: device
+    device_id: d6d7286c723a9d242b1ec4f8ab481bb2
+    entity_id: binary_sensor.hadley_bedroom_door
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - service: homeassistant.turn_off
+    target:
+      entity_id:
+      - light.hadley_bedroom_ceiling
+      - light.hadley_bedroom_nightstand
+      - switch.hadley_bedroom_floor_fan
+  mode: single
+- id: '1624018514582'
+  alias: Hadley Bedroom - Door Closed
+  description: ''
+  trigger:
+  - type: turned_off
+    platform: device
+    device_id: d6d7286c723a9d242b1ec4f8ab481bb2
+    entity_id: binary_sensor.hadley_bedroom_door
+    domain: binary_sensor
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 303b098c0487260b5a73d750133ef0d6
+    entity_id: switch.hadley_bedroom_floor_fan
+    domain: switch
+  - type: turn_off
+    device_id: 82ed6e62b039560ebb572e5485f8b2ba
+    entity_id: switch.hadley_bedroom_ceiling_light
+    domain: switch
+  - service: light.turn_off
+    target:
+      entity_id: light.hadley_bedroom_nightstand
+    data:
+      transition: 3
+  mode: single
+- id: '1624031232442'
+  alias: Emerson Bedroom - Door Opened
+  description: ''
+  trigger:
+  - type: turned_on
+    platform: device
+    device_id: 93d35e4bf84c905804212faf5d5aba71
+    entity_id: binary_sensor.emerson_bedroom_door
+    domain: binary_sensor
+  condition:
+  - condition: state
+    entity_id: input_boolean.emerson_bedroom_guest
+    state: 'off'
+  action:
+  - service: light.turn_on
+    data:
+      transition: 3
+      kelvin: 3000
+      brightness: 75
+    target:
+      entity_id: light.emerson_bedroom_nightstand
+  mode: restart
+- id: '1624031371290'
+  alias: Emerson Bedroom - Door Closed
+  description: ''
+  trigger:
+  - type: turned_off
+    platform: device
+    device_id: 93d35e4bf84c905804212faf5d5aba71
+    entity_id: binary_sensor.emerson_bedroom_door
+    domain: binary_sensor
+  condition:
+  - condition: state
+    entity_id: input_boolean.emerson_bedroom_guest
+    state: 'off'
+  action:
+  - type: turn_off
+    device_id: 82ed6e62b039560ebb572e5485f8b2ba
+    entity_id: switch.hadley_bedroom_ceiling_light
+    domain: switch
+  - service: light.turn_off
+    data:
+      transition: 3
+    target:
+      entity_id:
+      - light.emerson_bedroom_ceiling
+      - light.emerson_bedroom_nightstand
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: light.turn_off
+    target:
+      entity_id: light.emerson_bedroom_dresser
+    data:
+      transition: 5
+  mode: restart
+- id: '1624031519195'
+  alias: Emerson Bedroom - Door open for 30 minutes
+  description: ''
+  trigger:
+  - type: turned_on
+    platform: device
+    device_id: 93d35e4bf84c905804212faf5d5aba71
+    entity_id: binary_sensor.emerson_bedroom_door
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - condition: state
+    entity_id: input_boolean.emerson_bedroom_guest
+    state: 'off'
+  action:
+  - service: homeassistant.turn_off
+    target:
+      entity_id:
+      - light.emerson_bedroom_nightstand
+      - switch.emerson_bedroom_floor_fan
+      - light.emerson_bedroom_dresser
+  mode: single
+- id: '1624031897146'
+  alias: Emerson Bedroom - Switch Favorite Button
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 47
+      property_key: '003'
+      value: KeyPressed
+  condition: []
+  action:
+  - service: light.turn_on
+    target:
+      entity_id: light.emerson_bedroom_nightstand
+    data:
+      transition: 5
+      color_name: pink
+      brightness: 150
+  - service: light.turn_on
+    data:
+      transition: 5
+      color_name: purple
+      brightness: 150
+    target:
+      entity_id: light.emerson_bedroom_dresser
+  - type: turn_off
+    device_id: ee745e5d848409d554aa344b0fcd9039
+    entity_id: switch.emerson_bedroom_ceiling_light
+    domain: switch
+  mode: single
+- id: '1624032810797'
+  alias: Emerson Bedroom - Switch Hold Up or double tapped
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 47
+      property_key: '002'
+      value: KeyHeldDown
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 47
+      property_key: '002'
+      value: KeyPressed2x
+  condition: []
+  action:
+  - service: light.turn_on
+    target:
+      entity_id:
+      - light.emerson_bedroom_nightstand
+      - light.emerson_bedroom_dresser
+    data:
+      transition: 3
+      brightness: 255
+      kelvin: 2700
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - type: turn_on
+    device_id: ee745e5d848409d554aa344b0fcd9039
+    entity_id: switch.emerson_bedroom_ceiling_light
+    domain: switch
+  mode: single
+- id: '1624032894278'
+  alias: Emerson Bedroom - Switch Hold or Double Tap Down
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 47
+      property_key: '001'
+      value: KeyHeldDown
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 47
+      property_key: '001'
+      value: KeyPressed2x
+  condition: []
+  action:
+  - service: light.turn_off
+    data:
+      transition: 3
+    target:
+      entity_id:
+      - light.emerson_bedroom_nightstand
+      - light.emerson_bedroom_dresser
+  - type: turn_off
+    device_id: ee745e5d848409d554aa344b0fcd9039
+    entity_id: switch.emerson_bedroom_ceiling_light
+    domain: switch
   mode: single
