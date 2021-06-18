@@ -650,3 +650,47 @@
     entity_id: switch.emerson_bedroom_ceiling_light
     domain: switch
   mode: single
+- id: '1624035249756'
+  alias: Master Bathroom - Humidity Above 60
+  description: ''
+  trigger:
+  - type: humidity
+    platform: device
+    device_id: 907da82518c111ebb689e766efdccabf
+    entity_id: sensor.master_bathroom_shower_humidity
+    domain: sensor
+    above: 60
+  condition:
+  - condition: device
+    type: is_off
+    device_id: e93d1dc1691e5dfde0e2c21363417c7e
+    entity_id: switch.master_bathroom_shower_fan
+    domain: switch
+  action:
+  - type: turn_on
+    device_id: e93d1dc1691e5dfde0e2c21363417c7e
+    entity_id: switch.master_bathroom_shower_fan
+    domain: switch
+  mode: single
+- id: '1624035334920'
+  alias: Master Bathroom - Humidity dropped below 55
+  description: ''
+  trigger:
+  - type: humidity
+    platform: device
+    device_id: 907da82518c111ebb689e766efdccabf
+    entity_id: sensor.master_bathroom_shower_humidity
+    domain: sensor
+    below: 55
+  condition:
+  - condition: device
+    type: is_on
+    device_id: e93d1dc1691e5dfde0e2c21363417c7e
+    entity_id: switch.master_bathroom_shower_fan
+    domain: switch
+  action:
+  - type: turn_off
+    device_id: e93d1dc1691e5dfde0e2c21363417c7e
+    entity_id: switch.master_bathroom_shower_fan
+    domain: switch
+  mode: single
