@@ -1,18 +1,3 @@
-- id: '1603889259480'
-  alias: Garage Button - Momentary Switch
-  description: ''
-  trigger:
-  - platform: state
-    to: 'on'
-    entity_id: switch.garage_opener
-  condition: []
-  action:
-  - delay: 00:00:01
-  - service: switch.turn_off
-    data: {}
-    target:
-      entity_id: switch.garage_opener
-  mode: single
 - id: '1616166477419'
   alias: EMERGENCY - Kitchen Refrigerator Water Detected
   description: ''
