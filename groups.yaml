@@ -30,14 +30,12 @@ family_room_lights:
   entities:
     - light.family_room_couch
     - light.family_room_end_table
-    - light.family_room_window
     - light.family_room_bookshelf_huegroup
 family_room:
   name: Family Room
   entities:
     - light.family_room_couch
     - light.family_room_end_table
-    - light.family_room_window
     - light.family_room_bookshelf_huegroup
     - media_player.family_room_tv
     - switch.family_room_christmas_tree_lights
