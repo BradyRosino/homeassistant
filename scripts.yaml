@@ -1,21 +1,35 @@
-open_garage:
-  alias: Open garage door if closed
+scene_familyroom_watchmovie:
+  alias: Scene - Family Room - Watch Movie
   sequence:
-  - condition: state
-    entity_id: binary_sensor.garage_cover
-    state: 'off'
-  - service: homeassistant.turn_on
-    entity_id: switch.garage_opener
-close_garage:
-  alias: Close garage door if open
-  sequence:
-  - condition: state
-    entity_id: binary_sensor.garage_cover
-    state: 'on'
-  - service: homeassistant.turn_on
-    entity_id: switch.garage_opener
-stop_garage:
-  alias: Stop garage during open/close
-  sequence:
-  - service: homeassistant.turn_on
-    entity_id: switch.garage_opener
+  - service: switch.turn_off
+    target:
+      entity_id: switch.kitchen_closet_light
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.kitchen_island_lights
+      - light.kitchen_table_lights
+      - light.kitchen_main_lights
+    data:
+      transition: 10
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 2
+      milliseconds: 0
+  - service: light.turn_on
+    target:
+      entity_id: light.family_room_bookshelf_huegroup
+    data:
+      transition: 10
+      color_name: royalblue
+      brightness: 100
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.family_room_couch
+      - light.family_room_window
+      - light.family_room_end_table
+    data:
+      transition: 10
+  mode: restart
