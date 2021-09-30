@@ -3,14 +3,15 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: switch.garage_opener
     to: 'on'
+    entity_id: switch.garage_opener
   condition: []
   action:
   - delay: 00:00:01
   - service: switch.turn_off
     data: {}
-    entity_id: switch.garage_opener
+    target:
+      entity_id: switch.garage_opener
   mode: single
 - id: '1616166477419'
   alias: EMERGENCY - Kitchen Refrigerator Water Detected
@@ -120,7 +121,14 @@
   trigger:
   - platform: time
     at: input_datetime.master_bedroom_wakeup_time
-  condition: []
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
   action:
   - condition: state
     entity_id: binary_sensor.people_home
@@ -142,7 +150,7 @@
       target:
         entity_id: input_datetime.master_bedroom_wakeup_time
       data:
-        time: '6:30:00'
+        time: 07:00:00
   mode: single
 - id: '1623983039999'
   alias: Time - 8:00 AM - Reminder Emerson Guest Mode On
@@ -651,7 +659,7 @@
     domain: switch
   mode: single
 - id: '1624035249756'
-  alias: Master Bathroom - Humidity Above 60
+  alias: Master Bathroom - Humidity High
   description: ''
   trigger:
   - type: humidity
@@ -659,7 +667,7 @@
     device_id: 907da82518c111ebb689e766efdccabf
     entity_id: sensor.master_bathroom_shower_humidity
     domain: sensor
-    above: 60
+    above: 80
   condition:
   - condition: device
     type: is_off
@@ -673,7 +681,7 @@
     domain: switch
   mode: single
 - id: '1624035334920'
-  alias: Master Bathroom - Humidity dropped below 55
+  alias: Master Bathroom - Humidity dropped
   description: ''
   trigger:
   - type: humidity
@@ -681,7 +689,7 @@
     device_id: 907da82518c111ebb689e766efdccabf
     entity_id: sensor.master_bathroom_shower_humidity
     domain: sensor
-    below: 55
+    below: 70
   condition:
   - condition: device
     type: is_on
@@ -774,6 +782,13 @@
           message: House became empty and the garage is open!
           title: Home Status ALERT
     default: []
+  - service: switch.turn_on
+    target:
+      entity_id:
+      - switch.actions_hadley_camera
+      - switch.actions_emerson_camera
+      - switch.record_motion_hadley_camera
+      - switch.record_motion_emerson_camera
   mode: restart
 - id: '1624048856751'
   alias: Presence - Home became occupied
@@ -789,4 +804,61 @@
       entity_id: climate.living_room
     data:
       preset_mode: home
+  - service: switch.turn_off
+    target:
+      entity_id:
+      - switch.actions_emerson_camera
+      - switch.record_motion_emerson_camera
+      - switch.actions_hadley_camera
+      - switch.record_motion_hadley_camera
+  mode: single
+- id: '1624049395493'
+  alias: Family Room - New scene selected in lovelace
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_select.family_room_scene
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.family_room_scene
+        state: Max Brightness
+      sequence:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.family_room_max_brightness
+        data:
+          transition: 5
+    - conditions:
+      - condition: state
+        entity_id: input_select.family_room_scene
+        state: Good Morning
+      sequence:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.family_room_morning
+        data:
+          transition: 5
+    - conditions:
+      - condition: state
+        entity_id: input_select.family_room_scene
+        state: Watch Movie
+      sequence:
+      - service: script.scene_familyroom_watchmovie
+    - conditions:
+      - condition: state
+        entity_id: input_select.family_room_scene
+        state: Watch TV
+      sequence:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.family_room_tv
+        data:
+          transition: 5
+    default: []
+  - service: input_select.select_first
+    target:
+      entity_id: input_select.family_room_scene
   mode: single
