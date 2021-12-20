@@ -1,6 +1,0 @@
-platform: group
-name: family_room_bookshelf
-unique_id: family_room_bookshelf
-entities:
-  - light.family_room_tv_left
-  - light.family_room_tv_right
