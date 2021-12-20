@@ -3,115 +3,145 @@
   entities:
     light.brady_office_desk:
       min_mireds: 153
-      max_mireds: 500
-      effect_list:
-      - colorloop
-      - random
-      brightness: 158
-      color_temp: 294
-      effect: none
-      friendly_name: Brady Office Desk Light
-      supported_features: 63
-      state: 'on'
-    light.brady_office_couch:
-      min_mireds: 111
-      max_mireds: 400
-      effect_list:
-      - effect_stop
-      - effect_pulse
-      - effect_colorloop
-      brightness: 156
+      max_mireds: 370
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: hs
+      brightness: 157
       hs_color:
-      - 194.994
-      - 99.998
+      - 284.819
+      - 97.647
       rgb_color:
-      - 0
       - 191
+      - 6
       - 255
       xy_color:
-      - 0.146
-      - 0.238
-      entity_id:
-      - light.brady_office_couch_left
-      - light.brady_office_couch_right
-      friendly_name: brady_office_couch
-      icon: mdi:lightbulb-group
-      supported_features: 55
+      - 0.301
+      - 0.116
+      icon: mdi:desk-lamp
+      friendly_name: Brady Office Desk Light
+      supported_features: 32
       state: 'on'
+    light.brady_office_desk_strip:
+      min_mireds: 153
+      max_mireds: 555
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: xy
+      brightness: 209
+      hs_color:
+      - 210.364
+      - 96.863
+      rgb_color:
+      - 8
+      - 130
+      - 255
+      xy_color:
+      - 0.141
+      - 0.137
+      friendly_name: Brady Office Desk Strip Light
+      supported_features: 63
+      state: 'on'
+    light.group_brady_office_couch:
+      min_mireds: 153
+      max_mireds: 555
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: xy
+      brightness: 229
+      hs_color:
+      - 210.364
+      - 96.863
+      rgb_color:
+      - 8
+      - 130
+      - 255
+      xy_color:
+      - 0.141
+      - 0.137
+      friendly_name: group_brady_office_couch_lights
+      supported_features: 59
+      state: 'on'
+  icon: mdi:weather-night
 - id: '1607173620206'
   name: Family Room - Good Morning
   entities:
-    light.family_room_window:
-      min_mireds: 153
-      max_mireds: 500
-      effect_list:
-      - colorloop
-      - random
-      supported_color_modes:
-      - color_temp
-      - hs
-      color_mode: color_temp
-      brightness: 99
-      color_temp: 363
-      effect: none
-      friendly_name: Family Room Window Light
-      supported_features: 63
-      state: 'on'
-    light.family_room_end_table:
-      min_mireds: 153
-      max_mireds: 500
-      effect_list:
-      - colorloop
-      - random
-      supported_color_modes:
-      - color_temp
-      - hs
-      color_mode: color_temp
-      brightness: 89
-      color_temp: 363
-      effect: none
-      friendly_name: Family Room End Table
-      supported_features: 63
-      state: 'on'
     light.family_room_couch:
-      min_mireds: 153
+      min_mireds: 150
       max_mireds: 500
       effect_list:
-      - colorloop
-      - random
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
       supported_color_modes:
       - color_temp
-      - hs
+      - xy
       color_mode: color_temp
-      brightness: 107
+      brightness: 59
       color_temp: 363
-      effect: none
+      hs_color:
+      - 28.281
+      - 64.025
+      rgb_color:
+      - 255
+      - 168
+      - 91
+      xy_color:
+      - 0.521
+      - 0.387
       friendly_name: Family Room Couch Light
       supported_features: 63
       state: 'on'
-    light.bradyoffice_corner:
+    light.family_room_chair:
       min_mireds: 153
       max_mireds: 500
       effect_list:
-      - colorloop
-      - random
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
       supported_color_modes:
       - color_temp
-      - hs
-      friendly_name: family_room_tv_left
+      - xy
+      color_mode: color_temp
+      brightness: 76
+      color_temp: 384
+      hs_color:
+      - 28.614
+      - 68.881
+      rgb_color:
+      - 255
+      - 163
+      - 79
+      xy_color:
+      - 0.536
+      - 0.389
+      friendly_name: Family Room Chair Light
       supported_features: 63
-      state: 'off'
-    light.bradyoffice_bookshelf:
+      state: 'on'
+    light.group_family_room_bookshelf_lights:
       min_mireds: 153
       max_mireds: 500
-      effect_list:
-      - colorloop
-      - random
       supported_color_modes:
       - color_temp
-      - hs
-      friendly_name: family_room_tv_right
-      supported_features: 63
+      - xy
+      friendly_name: group_family_room_bookshelf_lights
+      supported_features: 59
       state: 'off'
 - id: '1607832027083'
   name: Master Bedroom - Wind Down
@@ -153,165 +183,142 @@
       max_mireds: 500
       effect_list:
       - colorloop
-      - random
       supported_color_modes:
       - color_temp
       - hs
-      color_mode: color_temp
-      brightness: 93
-      color_temp: 366
-      hs_color:
-      - 28.327
-      - 64.71
-      rgb_color:
-      - 255
-      - 167
-      - 89
-      xy_color:
-      - 0.524
-      - 0.387
-      effect: none
+      off_brightness:
       friendly_name: Family Room Couch Light
+      icon: mdi:floor-lamp
       supported_features: 63
-      state: 'on'
+      state: 'off'
     light.kitchen_island_lights:
       supported_color_modes:
       - brightness
+      color_mode: brightness
+      brightness: 84
       device_id: '7'
       zone_id: '3'
       friendly_name: Kitchen Island Lights
       supported_features: 33
-      state: 'off'
+      state: 'on'
     light.family_room_bookshelf:
-      min_mireds: 153
-      max_mireds: 500
-      effect_list:
-      - colorloop
-      - random
+      restored: true
       supported_color_modes:
-      - color_temp
-      - hs
-      color_mode: hs
-      brightness: 117
-      hs_color:
-      - 219.897
-      - 76.078
-      rgb_color:
-      - 61
-      - 126
-      - 255
-      xy_color:
-      - 0.158
-      - 0.14
-      effect: none
-      entity_id:
-      - light.family_room_tv_left
-      - light.family_room_tv_right
+      - onoff
+      supported_features: 0
       friendly_name: Family Room Bookshelf Lights
       icon: mdi:lightbulb-group
-      supported_features: 44
-      state: 'on'
+      state: unavailable
     light.family_room_chair:
       min_mireds: 153
       max_mireds: 500
       effect_list:
       - colorloop
-      - random
       supported_color_modes:
       - color_temp
       - hs
-      color_mode: color_temp
-      brightness: 115
-      color_temp: 344
-      hs_color:
-      - 27.987
-      - 59.51
-      rgb_color:
-      - 255
-      - 174
-      - 103
-      xy_color:
-      - 0.505
-      - 0.385
-      effect: none
-      friendly_name: Family Room Chair
+      off_brightness:
+      friendly_name: Family Room Chair Light
+      icon: mdi:lamp
       supported_features: 63
-      state: 'on'
+      state: 'off'
+    light.kitchen_main_lights:
+      supported_color_modes:
+      - brightness
+      device_id: '8'
+      zone_id: '4'
+      friendly_name: Kitchen Main Lights
+      supported_features: 33
+      state: 'off'
+    light.kitchen_table_lights:
+      supported_color_modes:
+      - brightness
+      device_id: '6'
+      zone_id: '2'
+      friendly_name: Kitchen Table Lights
+      supported_features: 33
+      state: 'off'
 - id: '1616183560915'
   name: Brady Office - Day Work
   entities:
     light.brady_office_desk:
       min_mireds: 153
-      max_mireds: 500
-      effect_list:
-      - colorloop
-      - random
-      brightness: 255
-      color_temp: 217
-      effect: none
+      max_mireds: 370
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: color_temp
+      brightness: 126
+      color_temp: 241
+      hs_color:
+      - 26.757
+      - 32.237
+      rgb_color:
+      - 255
+      - 209
+      - 172
+      xy_color:
+      - 0.412
+      - 0.363
+      icon: mdi:desk-lamp
       friendly_name: Brady Office Desk Light
+      supported_features: 32
+      state: 'on'
+    light.brady_office_desk_strip:
+      min_mireds: 153
+      max_mireds: 555
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 255
+      color_temp: 250
+      hs_color:
+      - 26.812
+      - 34.87
+      rgb_color:
+      - 255
+      - 205
+      - 166
+      xy_color:
+      - 0.421
+      - 0.364
+      friendly_name: Brady Office Desk Strip Light
       supported_features: 63
       state: 'on'
-    light.brady_office_couch_left:
-      min_mireds: 111
-      max_mireds: 400
-      effect_list:
-      - effect_colorloop
-      - effect_pulse
-      - effect_stop
-      friendly_name: Brady Office Couch Left
-      supported_features: 55
+    light.group_brady_office_couch:
+      min_mireds: 153
+      max_mireds: 555
+      supported_color_modes:
+      - color_temp
+      - xy
+      friendly_name: group_brady_office_couch_lights
+      supported_features: 59
       state: 'off'
-    light.brady_office_couch_right:
-      min_mireds: 111
-      max_mireds: 400
-      effect_list:
-      - effect_colorloop
-      - effect_pulse
-      - effect_stop
-      friendly_name: Brady Office Couch Right
-      supported_features: 55
-      state: 'off'
-    media_player.brady_office_receiver:
-      source_list:
-      - Computer
-      - Switch
-      - Playstation
-      - Sonos
-      volume_level: 0.25
-      is_volume_muted: false
-      source: Computer
-      audio_information:
-        format: ''
-        input_frequency: ''
-        input_channels: ''
-        listening_mode: Stereo
-        output_channels: 2.1 ch
-        output_frequency: ''
-      video_information:
-        input_resolution: Unknown
-        input_color_schema: ''
-        input_color_depth: 24bit
-        output_resolution: 1920 x 1080p
-        output_color_schema: RGB
-        output_color_depth: 24bit
-        picture_mode: ''
-      video_out: yes,out
-      friendly_name: brady office receiver
-      supported_features: 20364
-      state: 'on'
+  icon: mdi:weather-sunny
 - id: '1624049259712'
   name: Family Room - Max Brightness
   entities:
     light.family_room_couch:
-      min_mireds: 153
+      min_mireds: 150
       max_mireds: 500
       effect_list:
-      - colorloop
-      - random
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
       supported_color_modes:
       - color_temp
-      - hs
+      - xy
       color_mode: color_temp
       brightness: 255
       color_temp: 346
@@ -325,7 +332,6 @@
       xy_color:
       - 0.507
       - 0.384
-      effect: none
       friendly_name: Family Room Couch Light
       supported_features: 63
       state: 'on'
@@ -333,11 +339,15 @@
       min_mireds: 153
       max_mireds: 500
       effect_list:
-      - colorloop
-      - random
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
       supported_color_modes:
       - color_temp
-      - hs
+      - xy
       color_mode: color_temp
       brightness: 255
       color_temp: 344
@@ -351,11 +361,35 @@
       xy_color:
       - 0.505
       - 0.385
-      effect: none
-      friendly_name: Family Room Chair
+      friendly_name: Family Room Chair Light
       supported_features: 63
       state: 'on'
-    light.family_room_bookshelf:
+    light.group_family_room_bookshelf_lights:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 255
+      color_temp: 346
+      hs_color:
+      - 28.016
+      - 59.968
+      rgb_color:
+      - 255
+      - 173
+      - 102
+      xy_color:
+      - 0.507
+      - 0.384
+      friendly_name: group_family_room_bookshelf_lights
+      supported_features: 59
+      state: 'on'
+- id: '1635129153878'
+  name: Brady Office - Photo Editing
+  entities:
+    light.brady_office_desk:
       min_mireds: 153
       max_mireds: 500
       effect_list:
@@ -366,22 +400,244 @@
       - hs
       color_mode: color_temp
       brightness: 255
-      color_temp: 331
+      color_temp: 153
       hs_color:
-      - 27.791
-      - 56.328
+      - 54.768
+      - 1.6
       rgb_color:
       - 255
-      - 177
-      - 111
+      - 254
+      - 250
       xy_color:
-      - 0.495
-      - 0.382
+      - 0.326
+      - 0.333
       effect: none
-      entity_id:
-      - light.family_room_tv_left
-      - light.family_room_tv_right
-      friendly_name: Family Room Bookshelf Lights
-      icon: mdi:lightbulb-group
-      supported_features: 44
+      friendly_name: Brady Office Desk Light
+      supported_features: 63
       state: 'on'
+    light.brady_office_couch_left:
+      min_mireds: 153
+      max_mireds: 555
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 255
+      color_temp: 153
+      hs_color:
+      - 54.768
+      - 1.6
+      rgb_color:
+      - 255
+      - 254
+      - 250
+      xy_color:
+      - 0.326
+      - 0.333
+      color:
+        x: 0.3131
+        y: 0.3232
+      linkquality: 159
+      friendly_name: Brady Office Couch Left
+      supported_features: 63
+      state: 'on'
+    light.brady_office_couch_right:
+      min_mireds: 153
+      max_mireds: 555
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 255
+      color_temp: 153
+      hs_color:
+      - 54.768
+      - 1.6
+      rgb_color:
+      - 255
+      - 254
+      - 250
+      xy_color:
+      - 0.326
+      - 0.333
+      color:
+        x: 0.3131
+        y: 0.3232
+      linkquality: 167
+      friendly_name: Brady Office Couch Right
+      supported_features: 63
+      state: 'on'
+    light.brady_office_desk_strip:
+      min_mireds: 153
+      max_mireds: 555
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 255
+      color_temp: 153
+      hs_color:
+      - 54.768
+      - 1.6
+      rgb_color:
+      - 255
+      - 254
+      - 250
+      xy_color:
+      - 0.326
+      - 0.333
+      color:
+        x: 0.3131
+        y: 0.3232
+      linkquality: 167
+      friendly_name: Brady Office Desk Strip
+      supported_features: 63
+      state: 'on'
+  icon: mdi:camera
+- id: '1636076093158'
+  name: Master Bathroom - Relaxing Bath
+  entities:
+    light.master_bathroom_mirror:
+      supported_color_modes:
+      - brightness
+      friendly_name: 'Master Bathroom Mirror Light: Current value'
+      supported_features: 32
+      state: 'off'
+    light.master_bathroom_bath:
+      supported_color_modes:
+      - brightness
+      friendly_name: 'Master Bathroom Bath Light: Current value'
+      supported_features: 32
+      state: 'off'
+    media_player.sonos_roam:
+      source_list:
+      - Ambient Chill
+      - Calm Vibes
+      - Chill as Folk
+      - Disney Hits
+      - Feel-Good Indie Rock
+      - 'Focus: Tense Rainy Morning'
+      - Happy Folk
+      - Michigan Radio
+      - Peaceful Piano
+      - Peaceful Retreat
+      - 'Relax: Foggy Morning'
+      - 'SomaFM: Indie Pop Rocks!'
+      - The Avett Brothers Radio
+      volume_level: 0.19
+      is_volume_muted: false
+      media_content_id: x-sonos-spotify:spotify%3atrack%3a1UH0Sxy2Ahx7T8XQ6csGku?sid=12&flags=8224&sn=15
+      media_content_type: music
+      media_duration: 199
+      media_position: 0
+      media_position_updated_at: '2021-11-05T01:34:25.716762+00:00'
+      media_title: éternité
+      media_artist: Eric Ardouin
+      media_album_name: éternité
+      media_playlist: Peaceful Retreat
+      shuffle: true
+      repeat: 'off'
+      sonos_group:
+      - media_player.sonos_roam
+      bass_level: 0
+      treble_level: 0
+      queue_position: 0
+      friendly_name: Sonos Roam
+      entity_picture: /api/media_player_proxy/media_player.sonos_roam?token=ee175aef310006c8521d2043b3227056de074f8662331843e3fdd2d8ce7fb59b&cache=dfe04dfb32b42c4c
+      supported_features: 457279
+      state: playing
+    switch.sonos_sonos_roam_crossfade:
+      friendly_name: Sonos Roam Crossfade
+      icon: mdi:swap-horizontal
+      state: 'off'
+  icon: mdi:bathtub
+- id: '1639750806857'
+  name: Climate Home
+  entities:
+    climate.thermostat_2:
+      hvac_modes:
+      - 'off'
+      - heat
+      - cool
+      - heat_cool
+      min_temp: 45
+      max_temp: 92
+      min_humidity: 20
+      max_humidity: 50
+      current_temperature: 69
+      temperature:
+      target_temp_high: 72
+      target_temp_low: 69
+      current_humidity: 40
+      humidity: 36
+      hvac_action: idle
+      friendly_name: Thermostat
+      supported_features: 7
+      state: heat_cool
+- id: '1639750863052'
+  name: Climate Away
+  entities:
+    climate.thermostat_2:
+      hvac_modes:
+      - 'off'
+      - heat
+      - cool
+      - heat_cool
+      min_temp: 45
+      max_temp: 92
+      min_humidity: 20
+      max_humidity: 50
+      current_temperature: 69
+      temperature:
+      target_temp_high: 82
+      target_temp_low: 59
+      current_humidity: 40
+      humidity: 36
+      hvac_action: idle
+      friendly_name: Thermostat
+      supported_features: 7
+      state: heat_cool
+- id: '1639750926741'
+  name: Climate Sleep
+  entities:
+    climate.thermostat_2:
+      hvac_modes:
+      - 'off'
+      - heat
+      - cool
+      - heat_cool
+      min_temp: 45
+      max_temp: 92
+      min_humidity: 20
+      max_humidity: 50
+      current_temperature: 69
+      temperature:
+      target_temp_high: 71
+      target_temp_low: 66
+      current_humidity: 39
+      humidity: 36
+      hvac_action: idle
+      friendly_name: Thermostat
+      supported_features: 7
+      state: heat_cool
