@@ -4,6 +4,7 @@ filter:
     - light
     - fan
     - cover
+    - lock
   include_entities:
     - switch.master_bedroom_sound_machine
     - switch.master_bathroom_shower_fan
@@ -18,5 +19,6 @@ filter:
     - light.brady_office_desk_old
     - light.family_room_tv_left
     - light.family_room_tv_right
+    - lock.boltchecked_garage_access_door
   exclude_entity_globs:
     - light.*_huegroup
