@@ -8,6 +8,7 @@ custom_components/
 www/
 blueprints/
 .vscode/
+packages/keymaster/
 
 # Ignore wildcards
 *.db
