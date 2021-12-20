@@ -12,6 +12,7 @@ blueprints/
 # Ignore wildcards
 *.db
 *.log
+*.log.*
 *.pem
 
 #ignore files
