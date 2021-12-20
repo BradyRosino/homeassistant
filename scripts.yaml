@@ -33,3 +33,28 @@ scene_familyroom_watchmovie:
     data:
       transition: 10
   mode: restart
+set_guest_home:
+  alias: Set Guest Home
+  sequence:
+  - service: device_tracker.see
+    data:
+      dev_id: hass_guest
+      location_name: home
+  mode: single
+set_guest_away:
+  alias: Set Guest Away
+  sequence:
+  - service: device_tracker.see
+    data:
+      dev_id: hass_guest
+      location_name: not_home
+  mode: single
+keymaster_garage_access_door_manual_notify:
+  alias: Key Master Send Manual Notifications
+  sequence:
+  - service: notify.mobile_app_bradys_iphone
+    data:
+      message: '{{ message }}'
+      title: '{{ title }}'
+  mode: parallel
+  max: 10
