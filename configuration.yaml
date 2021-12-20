@@ -2,6 +2,7 @@ homeassistant:
   customize: !include customize.yaml
   external_url: !secret external_url
   internal_url: !secret internal_url
+  packages: !include_dir_named packages
 
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
@@ -10,9 +11,9 @@ http:
   use_x_forwarded_for: true
   trusted_proxies:
     - 127.0.0.1
-    - 10.1.1.3
-    - 10.1.1.10
+    - 10.1.1.0/24
     - 172.50.0.0/16
+    - 172.18.0.0/24
 
 # Text to speech
 tts:
@@ -39,3 +40,15 @@ recorder:
 
 logger:
   default: warning
+
+webostv:
+  host: 10.1.20.30
+  name: Master Bedroom TV
+  #other settings
+  turn_on_action:
+    service: wake_on_lan.send_magic_packet
+    data:
+      mac: !secret master_bedroom_webostv_mac
+      broadcast_address: 10.1.20.30
+
+wake_on_lan:
