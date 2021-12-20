@@ -20,3 +20,4 @@ secrets.yaml
 *.DS_Store
 .HA_VERSION
 ip_bans.yaml
+webostv.conf
