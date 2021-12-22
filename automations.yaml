@@ -68,6 +68,10 @@
     device_id: 3ad2ff5c0625a224ba7cebc093b39d51
     entity_id: light.outside_front_porch
     domain: light
+  - type: turn_on
+    device_id: bec78f51ea235bbf4c720c466dcd51fa
+    entity_id: switch.christmas_lights
+    domain: switch
   mode: single
 - id: '1623968412592'
   alias: Time - Sunrise (offset -30m)
@@ -161,70 +165,13 @@
     at: 08:00:00
   condition:
   - condition: state
-    entity_id: input_boolean.presence_guest
-    state: 'on'
+    state: home
+    entity_id: person.guest
   action:
   - service: notify.mobile_app_bradys_iphone
     data:
       message: Guest mode is enabled.
       title: Home Reminder
-  mode: single
-- id: '1623983823883'
-  alias: Brady Office - Cube - Rotate Right
-  description: ''
-  trigger:
-  - platform: device
-    domain: mqtt
-    device_id: 9077998b18c111eb960a27cecc7c5cec
-    type: action
-    subtype: rotate_right
-    discovery_id: 0x00158d00032c9e2d action_rotate_right
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: state
-        entity_id: sun.sun
-        state: above_horizon
-      sequence:
-      - service: light.turn_on
-        data:
-          transition: 3
-          brightness: 255
-          kelvin: 4800
-        target:
-          entity_id: light.brady_office_desk
-    default:
-    - service: light.turn_on
-      target:
-        device_id: e88a9f9f8edbf590d9a531a3b8810d01
-      data:
-        transition: 10
-        kelvin: 2600
-        brightness_pct: 100
-  mode: single
-- id: '1623984001069'
-  alias: Brady Office - Cube - Rotate Left
-  description: ''
-  trigger:
-  - platform: device
-    domain: mqtt
-    device_id: 9077998b18c111eb960a27cecc7c5cec
-    type: action
-    subtype: rotate_left
-    discovery_id: 0x00158d00032c9e2d action_rotate_left
-  condition: []
-  action:
-  - service: light.turn_off
-    data:
-      transition: 5
-    target:
-      entity_id: light.brady_office_desk
-  - service: light.turn_off
-    target:
-      entity_id: light.brady_office_couch
-    data:
-      transition: 5
   mode: single
 - id: '1624013090864'
   alias: Downstairs Bathroom - Motion
@@ -233,7 +180,7 @@
   - type: motion
     platform: device
     device_id: 907837c418c111ebbb6d91773cfacc14
-    entity_id: binary_sensor.guest_bathroom_motion
+    entity_id: binary_sensor.guest_bathroom_motion_sensor_occupancy
     domain: binary_sensor
   condition: []
   action:
@@ -260,8 +207,7 @@
     domain: binary_sensor
   condition:
   - condition: template
-    value_template: 'value_template: "{{ state_attr(''sun.sun'', ''elevation'') <
-      -6 }}"'
+    value_template: '{{ state_attr(''sun.sun'', ''elevation'') < -6 }}'
   - condition: device
     type: is_off
     device_id: b5844f5a506359457bd6f5f9b92da167
@@ -300,20 +246,22 @@
   mode: single
 - id: '1624014307772'
   alias: Garage - Doors (entry or cover) Opened
-  description: ''
+  description: When garage doors are opened, turn on ceiling light if the sun is more
+    than 6 degrees below the horizon
   trigger:
-  - type: turned_on
+  - platform: device
+    device_id: dbc501a633cfe42e27bed2f4665c75ea
+    domain: cover
+    entity_id: cover.garage
+    type: opened
+  - type: opened
     platform: device
-    device_id: 8cc1025c5227abaa702db562a9363506
-    entity_id: binary_sensor.garage_cover
+    device_id: 8181392f195211eb8537a1139f68f030
+    entity_id: binary_sensor.kitchen_garage_door
     domain: binary_sensor
-  - platform: state
-    entity_id: binary_sensor.kitchen_garage_entry_door
-    to: 'on'
   condition:
   - condition: template
-    value_template: 'value_template: "{{ state_attr(''sun.sun'', ''elevation'') <
-      -6 }}"'
+    value_template: '{{ state_attr(''sun.sun'', ''elevation'') < -6 }}'
   - condition: device
     type: is_off
     device_id: 06db30d13e58f7ad02951a3e0a4ce55a
@@ -329,20 +277,26 @@
   alias: Garage - Doors (entry and cover) Closed
   description: ''
   trigger:
-  - type: turned_off
+  - type: not_opened
     platform: device
-    device_id: 8cc1025c5227abaa702db562a9363506
-    entity_id: binary_sensor.garage_cover
+    device_id: 8181392f195211eb8537a1139f68f030
+    entity_id: binary_sensor.kitchen_garage_door
     domain: binary_sensor
     for:
       hours: 0
       minutes: 15
       seconds: 0
       milliseconds: 0
-  - platform: state
-    entity_id: binary_sensor.kitchen_garage_entry_door
-    to: 'off'
-    for: 00:15:00
+  - platform: device
+    device_id: dbc501a633cfe42e27bed2f4665c75ea
+    domain: cover
+    entity_id: cover.garage
+    type: closed
+    for:
+      hours: 0
+      minutes: 15
+      seconds: 0
+      milliseconds: 0
   condition:
   - condition: device
     type: is_on
@@ -406,12 +360,12 @@
   condition: []
   action:
   - service: light.turn_on
-    target:
-      entity_id: light.hadley_bedroom_nightstand
     data:
       transition: 3
       kelvin: 3000
       brightness: 75
+    target:
+      device_id: 917b4d901f6ba59c38caab54d9227cd8
   mode: restart
 - id: '1624018352517'
   alias: Hadley Bedroom - Door open for 30 minutes
@@ -433,8 +387,10 @@
     target:
       entity_id:
       - light.hadley_bedroom_ceiling
-      - light.hadley_bedroom_nightstand
-      - switch.hadley_bedroom_floor_fan
+      device_id:
+      - 303b098c0487260b5a73d750133ef0d6
+      - 917b4d901f6ba59c38caab54d9227cd8
+      - c758225b96d9e897869f1351901cbec7
   mode: single
 - id: '1624018514582'
   alias: Hadley Bedroom - Door Closed
@@ -451,13 +407,13 @@
     device_id: 303b098c0487260b5a73d750133ef0d6
     entity_id: switch.hadley_bedroom_floor_fan
     domain: switch
-  - type: turn_off
-    device_id: 82ed6e62b039560ebb572e5485f8b2ba
-    entity_id: switch.hadley_bedroom_ceiling_light
-    domain: switch
   - service: light.turn_off
     target:
-      entity_id: light.hadley_bedroom_nightstand
+      entity_id:
+      - light.hadley_bedroom_ceiling
+      device_id:
+      - c758225b96d9e897869f1351901cbec7
+      - 917b4d901f6ba59c38caab54d9227cd8
     data:
       transition: 3
   mode: single
@@ -481,7 +437,7 @@
       kelvin: 3000
       brightness: 75
     target:
-      entity_id: light.emerson_bedroom_nightstand
+      device_id: 58c0ffa806bf215b197a4543a754154a
   mode: restart
 - id: '1624031371290'
   alias: Emerson Bedroom - Door Closed
@@ -497,27 +453,27 @@
     entity_id: input_boolean.emerson_bedroom_guest
     state: 'off'
   action:
-  - type: turn_off
-    device_id: 82ed6e62b039560ebb572e5485f8b2ba
-    entity_id: switch.hadley_bedroom_ceiling_light
-    domain: switch
   - service: light.turn_off
     data:
       transition: 3
     target:
       entity_id:
       - light.emerson_bedroom_ceiling
-      - light.emerson_bedroom_nightstand
+      device_id:
+      - 8a1f032e17016dbcd4e91768396ae9ac
+  - service: switch.turn_on
+    target:
+      entity_id: switch.emerson_bedroom_floor_fan
   - delay:
       hours: 0
       minutes: 0
       seconds: 3
       milliseconds: 0
   - service: light.turn_off
-    target:
-      entity_id: light.emerson_bedroom_dresser
     data:
       transition: 5
+    target:
+      device_id: 58c0ffa806bf215b197a4543a754154a
   mode: restart
 - id: '1624031519195'
   alias: Emerson Bedroom - Door open for 30 minutes
@@ -540,10 +496,11 @@
   action:
   - service: homeassistant.turn_off
     target:
-      entity_id:
-      - light.emerson_bedroom_nightstand
-      - switch.emerson_bedroom_floor_fan
-      - light.emerson_bedroom_dresser
+      device_id:
+      - f7e5df9223c59a49f2495f7f44d9fa8a
+      - ee745e5d848409d554aa344b0fcd9039
+      - 58c0ffa806bf215b197a4543a754154a
+      - 8a1f032e17016dbcd4e91768396ae9ac
   mode: single
 - id: '1624031897146'
   alias: Emerson Bedroom - Switch Favorite Button
@@ -649,19 +606,19 @@
   trigger:
   - type: humidity
     platform: device
-    device_id: 907da82518c111ebb689e766efdccabf
-    entity_id: sensor.master_bathroom_shower_humidity
+    device_id: c3bc6b85b78274929939050c661984ea
+    entity_id: sensor.master_bathroom_multisensor_humidity
     domain: sensor
-    above: 80
+    above: 60
   condition:
   - condition: device
     type: is_off
-    device_id: e93d1dc1691e5dfde0e2c21363417c7e
+    device_id: 6376835cb6ce57227493a15a80196b0c
     entity_id: switch.master_bathroom_shower_fan
     domain: switch
   action:
   - type: turn_on
-    device_id: e93d1dc1691e5dfde0e2c21363417c7e
+    device_id: 6376835cb6ce57227493a15a80196b0c
     entity_id: switch.master_bathroom_shower_fan
     domain: switch
   mode: single
@@ -671,19 +628,23 @@
   trigger:
   - type: humidity
     platform: device
-    device_id: 907da82518c111ebb689e766efdccabf
-    entity_id: sensor.master_bathroom_shower_humidity
+    device_id: c3bc6b85b78274929939050c661984ea
+    entity_id: sensor.master_bathroom_multisensor_humidity
     domain: sensor
-    below: 70
+    below: 50
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
   condition:
   - condition: device
     type: is_on
-    device_id: e93d1dc1691e5dfde0e2c21363417c7e
+    device_id: 6376835cb6ce57227493a15a80196b0c
     entity_id: switch.master_bathroom_shower_fan
     domain: switch
   action:
   - type: turn_off
-    device_id: e93d1dc1691e5dfde0e2c21363417c7e
+    device_id: 6376835cb6ce57227493a15a80196b0c
     entity_id: switch.master_bathroom_shower_fan
     domain: switch
   mode: single
@@ -692,14 +653,14 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: input_boolean.presence_guest
+    entity_id: person.guest
   condition: []
   action:
   - service: notify.mobile_app_bradys_iphone
     data:
       title: Guest Mode
-      message: Guest mode is {% if is_state("input_boolean.presence_guest", "on")
-        -%}enabled{%- else -%}disabled{% endif %}.
+      message: Guest mode is {% if is_state("person.guest", "home") -%}enabled{%-
+        else -%}disabled{% endif %}.
   mode: single
 - id: '1624048054955'
   alias: Presence - House became empty
@@ -797,53 +758,358 @@
       - switch.actions_hadley_camera
       - switch.record_motion_hadley_camera
   mode: single
-- id: '1624049395493'
-  alias: Family Room - New scene selected in lovelace
+- id: '1634589697353'
+  alias: EMERGENCY - Kid Bathroom Left Sink Water Detected
   description: ''
   trigger:
-  - platform: state
-    entity_id: input_select.family_room_scene
+  - type: moist
+    platform: device
+    device_id: 0d58c37309df4bea13652a182c2ad894
+    entity_id: binary_sensor.kid_bathroom_left_sink_water_sensor_water_leak
+    domain: binary_sensor
+  condition: []
+  action:
+  - repeat:
+      until:
+      - type: is_not_moist
+        condition: device
+        device_id: 0d58c37309df4bea13652a182c2ad894
+        entity_id: binary_sensor.kid_bathroom_left_sink_water_sensor_water_leak
+        domain: binary_sensor
+      sequence:
+      - service: notify.brady_holly_iphones
+        data:
+          message: There is a leak detected beneath the left sink in the kid bathroom!
+          title: Leak Detected!
+          data:
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 1
+      - delay:
+          hours: 0
+          minutes: 1
+          seconds: 0
+          milliseconds: 0
+  mode: restart
+- id: '1635170212533'
+  alias: Brady Office - Cube - Rotate Right
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 9077998b18c111eb960a27cecc7c5cec
+    type: action
+    subtype: rotate_right
+    discovery_id: 0x00158d00032c9e2d action_rotate_right
   condition: []
   action:
   - choose:
     - conditions:
       - condition: state
-        entity_id: input_select.family_room_scene
-        state: Max Brightness
+        entity_id: sun.sun
+        state: above_horizon
       sequence:
       - service: scene.turn_on
         target:
-          entity_id: scene.family_room_max_brightness
+          entity_id: scene.brady_office_day_work
         data:
-          transition: 5
-    - conditions:
-      - condition: state
-        entity_id: input_select.family_room_scene
-        state: Good Morning
-      sequence:
-      - service: scene.turn_on
-        target:
-          entity_id: scene.family_room_morning
-        data:
-          transition: 5
-    - conditions:
-      - condition: state
-        entity_id: input_select.family_room_scene
-        state: Watch Movie
-      sequence:
-      - service: script.scene_familyroom_watchmovie
-    - conditions:
-      - condition: state
-        entity_id: input_select.family_room_scene
-        state: Watch TV
-      sequence:
-      - service: scene.turn_on
-        target:
-          entity_id: scene.family_room_tv
-        data:
-          transition: 5
-    default: []
+          transition: 3
+    default:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.brady_office_late_night
+      data:
+        transition: 5
+  mode: single
+- id: '1635170263988'
+  alias: Brady Office - Cube - Rotate Left
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 9077998b18c111eb960a27cecc7c5cec
+    type: action
+    subtype: rotate_left
+    discovery_id: 0x00158d00032c9e2d action_rotate_left
+  condition: []
+  action:
+  - service: light.turn_off
+    target:
+      area_id: afe28a05191011ebbbdf75a2e62360bd
+    data:
+      transition: 5
+  mode: single
+- id: '1637767478426'
+  alias: Time - Sunset - Turn On Christmas Lights
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: -00:45:00
+  condition: []
+  action:
+  - type: turn_on
+    device_id: bec78f51ea235bbf4c720c466dcd51fa
+    entity_id: switch.christmas_lights
+    domain: switch
+  - type: turn_on
+    device_id: 9074b8a518c111eba7b6c1255b8b3cbf
+    entity_id: switch.outside_santa
+    domain: switch
+  - service: light.turn_on
+    data:
+      brightness_pct: 70
+      color_temp: 360
+      transition: 10
+    target:
+      device_id: 1f54c7ea65bbcc02cf8c51b72f759873
+  mode: single
+- id: '1637767726395'
+  alias: Time - Midnight - Turn off Christmas Lights
+  description: Nightly, turn off the exterior Christmas lights
+  trigger:
+  - platform: time
+    at: 00:00:00
+  condition: []
+  action:
+  - type: turn_off
+    device_id: bec78f51ea235bbf4c720c466dcd51fa
+    entity_id: switch.christmas_lights
+    domain: switch
+  - type: turn_off
+    device_id: 9074b8a518c111eba7b6c1255b8b3cbf
+    entity_id: switch.outside_santa
+    domain: switch
+  - service: light.turn_off
+    data:
+      transition: 10
+    target:
+      entity_id: light.group_outside_spotlights
+  mode: single
+- id: '1637771937963'
+  alias: Family Room - Scene - Max Brightness
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_select.family_room_scene
+    to: Max Brightness
+  condition: []
+  action:
   - service: input_select.select_first
     target:
       entity_id: input_select.family_room_scene
+  - service: light.turn_on
+    data:
+      transition: 5
+      brightness: 255
+      kelvin: 3500
+    target:
+      entity_id: light.group_family_room_bookshelf_lights
+  mode: single
+- id: '1637774743021'
+  alias: Master Bedroom Closet Motion
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 907982a618c111eb87e773805a930a2b
+    entity_id: binary_sensor.master_bedroom_closet_motion_sensor_occupancy
+    domain: binary_sensor
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 6b6012a88829303c14b265f31024d33d
+    entity_id: switch.master_bedroom_closet_light
+    domain: switch
+  - delay:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: 6b6012a88829303c14b265f31024d33d
+    entity_id: switch.master_bedroom_closet_light
+    domain: switch
+  mode: restart
+- id: '1637786518227'
+  alias: Family Room - Scene - Good Morning Selected
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_select.family_room_scene
+    to: Good Morning
+  condition: []
+  action:
+  - service: input_select.select_first
+    target:
+      entity_id: input_select.family_room_scene
+  - service: scene.turn_on
+    target:
+      entity_id: scene.family_room_morning
+    data:
+      transition: 5
+  mode: single
+- id: '1637787040123'
+  alias: Family Room - Scene - Watch TV
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_select.family_room_scene
+    to: Watch TV
+  condition: []
+  action:
+  - service: input_select.select_first
+    target:
+      entity_id: input_select.family_room_scene
+  - service: switch.turn_off
+    target:
+      device_id: 6b6012a88829303c14b265f31024d33d
+  - service: light.turn_off
+    target:
+      device_id:
+      - 4db6560bf97af7c3c455f00c77f793cb
+      - b5844f5a506359457bd6f5f9b92da167
+    data:
+      transition: 7
+  - service: light.turn_on
+    target:
+      device_id: 9700ca2b9796285a8b5ca9650497e223
+    data:
+      transition: 10
+  - service: light.turn_on
+    data:
+      transition: 10
+      color_name: royalblue
+      brightness: 150
+    target:
+      device_id: a9893a57de6c0fc07f55d428007fe9c7
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 2
+      milliseconds: 0
+  - service: light.turn_on
+    data:
+      kelvin: 3000
+      transition: 10
+      brightness: 255
+    target:
+      device_id:
+      - e6eaf19dee09afbfc5e496e50657df70
+      - 07f9f0e67ba526ab9116941b9cc47246
+  mode: single
+- id: '1637787312504'
+  alias: Family Room - Scene - Watch Movie
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_select.family_room_scene
+    to: Watch Movie
+  condition: []
+  action:
+  - service: input_select.select_first
+    target:
+      entity_id: input_select.family_room_scene
+  - service: switch.turn_off
+    target:
+      device_id: 6b6012a88829303c14b265f31024d33d
+  - service: light.turn_off
+    target:
+      device_id:
+      - 4db6560bf97af7c3c455f00c77f793cb
+      - b5844f5a506359457bd6f5f9b92da167
+      - 9700ca2b9796285a8b5ca9650497e223
+    data:
+      transition: 10
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 2
+      milliseconds: 0
+  - service: light.turn_on
+    data:
+      transition: 10
+      color_name: royalblue
+      brightness: 100
+    target:
+      entity_id: light.group_family_room_bookshelf_lights
+  - service: light.turn_off
+    data:
+      transition: 10
+    target:
+      device_id:
+      - e6eaf19dee09afbfc5e496e50657df70
+      - 07f9f0e67ba526ab9116941b9cc47246
+  mode: single
+- id: '1638209526136'
+  alias: Brady Office - Sonos Started Playing
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: media_player.brady_office_sonos
+    to: playing
+  condition: []
+  action:
+  - service: remote.send_command
+    target:
+      entity_id: remote.brady_office_remote_remote
+    data:
+      device: desk_speaker
+      command: input_optical
+  mode: single
+- id: '1638209723331'
+  alias: Brady Office - Sonos Stopped
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: media_player.brady_office_sonos
+    from: playing
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  condition: []
+  action:
+  - service: remote.send_command
+    target:
+      entity_id: remote.brady_office_remote_remote
+    data:
+      device: desk_speaker
+      command: input_line1
+  mode: single
+- id: '1639773730245'
+  alias: New Automation
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 907c40db18c111eb88baad87f8551e7e
+    type: action
+    subtype: single
+    discovery_id: 0x286d9700010df2d7 action_single
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: device
+        type: is_off
+        device_id: 58c0ffa806bf215b197a4543a754154a
+        entity_id: light.emerson_bedroom_nightstand
+        domain: light
+      sequence:
+      - service: light.turn_on
+        target:
+          device_id: 58c0ffa806bf215b197a4543a754154a
+        data:
+          transition: 3
+          kelvin: 3000
+          brightness: 133
+    default:
+    - type: turn_off
+      device_id: 58c0ffa806bf215b197a4543a754154a
+      entity_id: light.emerson_bedroom_nightstand
+      domain: light
   mode: single
