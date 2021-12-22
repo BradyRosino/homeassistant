@@ -17,8 +17,9 @@ filter:
     - light.master_bedroom_ceiling_fan
     - light.family_room_ceiling_fan
     - light.brady_office_desk_old
-    - light.family_room_tv_left
-    - light.family_room_tv_right
+    - light.family_room_bookshelf_left
+    - light.family_room_bookshelf_right
     - lock.boltchecked_garage_access_door
   exclude_entity_globs:
     - light.*_huegroup
+    - light.*_spotlight
