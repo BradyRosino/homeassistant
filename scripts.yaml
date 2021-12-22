@@ -58,3 +58,27 @@ keymaster_garage_access_door_manual_notify:
       title: '{{ title }}'
   mode: parallel
   max: 10
+pyscript_set_log_level_warning:
+  alias: Pyscript - Set log level to warning
+  sequence:
+  - service: logger.set_level
+    data:
+      custom_components.pyscript: warning
+  mode: single
+  icon: mdi:alert
+pyscript_set_log_level_info:
+  alias: Pyscript - Set log level to info
+  sequence:
+  - service: logger.set_level
+    data:
+      custom_components.pyscript: info
+  mode: single
+  icon: mdi:information
+pyscript_set_log_level_debug:
+  alias: Pyscript - Set log level to debug
+  sequence:
+  - service: logger.set_level
+    data:
+      custom_components.pyscript: debug
+  mode: single
+  icon: mdi:information
