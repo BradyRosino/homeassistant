@@ -1,3 +1,0 @@
-platform: switch
-name: master_bedroom_closet
-entity_id: switch.master_bedroom_closet_light

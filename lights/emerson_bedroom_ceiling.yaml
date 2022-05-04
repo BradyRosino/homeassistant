@@ -1,3 +1,0 @@
-platform: switch
-name: emerson_bedroom_ceiling
-entity_id: switch.emerson_bedroom_ceiling_light

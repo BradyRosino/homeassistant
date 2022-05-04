@@ -1,3 +1,0 @@
-platform: switch
-name: kitchen_closet
-entity_id: switch.kitchen_closet_light

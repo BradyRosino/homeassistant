@@ -6,6 +6,12 @@ homeassistant:
 
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
+stream:
+  ll_hls: true
+  part_duration: 0.75
+  segment_duration: 6
+frontend:
+  themes: !include_dir_merge_named themes
 
 http:
   use_x_forwarded_for: true
@@ -22,7 +28,7 @@ group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
-light: !include_dir_list lights
+#light: !include_dir_list lights
 binary_sensor: !include_dir_list binary_sensors
 
 homekit: !include homekit.yaml
@@ -41,14 +47,16 @@ recorder:
 logger:
   default: warning
 
-webostv:
-  host: 10.1.20.30
-  name: Master Bedroom TV
-  #other settings
-  turn_on_action:
-    service: wake_on_lan.send_magic_packet
-    data:
-      mac: !secret master_bedroom_webostv_mac
-      broadcast_address: 10.1.20.30
-
 wake_on_lan:
+
+template:
+  - sensor:
+      - name: "Lights On"
+        unit_of_measurement: "Lights On"
+        state: >
+          {{ states.light|selectattr('state','equalto','on')|rejectattr('entity_id','search','outside')|list|length }}
+  - sensor:
+      - name: "Switches On"
+        unit_of_measurement: "Switches On"
+        state: >
+          {{ states.switch|selectattr('state','equalto','on')|list|length }}

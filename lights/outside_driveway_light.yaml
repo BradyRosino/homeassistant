@@ -1,3 +1,0 @@
-platform: switch
-name: outside_driveway
-entity_id: switch.outside_driveway_light

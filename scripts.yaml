@@ -33,22 +33,6 @@ scene_familyroom_watchmovie:
     data:
       transition: 10
   mode: restart
-set_guest_home:
-  alias: Set Guest Home
-  sequence:
-  - service: device_tracker.see
-    data:
-      dev_id: hass_guest
-      location_name: home
-  mode: single
-set_guest_away:
-  alias: Set Guest Away
-  sequence:
-  - service: device_tracker.see
-    data:
-      dev_id: hass_guest
-      location_name: not_home
-  mode: single
 keymaster_garage_access_door_manual_notify:
   alias: Key Master Send Manual Notifications
   sequence:
@@ -82,3 +66,30 @@ pyscript_set_log_level_debug:
       custom_components.pyscript: debug
   mode: single
   icon: mdi:information
+test_set_vpn:
+  sequence:
+  - device_id: 14a2404bd194ea1815fcda8a305be77e
+    domain: zwave_js
+    entity_id: lock.garage_access_door
+    type: set_lock_usercode
+    code_slot: '10'
+    usercode: '5475'
+  mode: single
+  alias: Test set vpn
+test:
+  alias: Test
+  sequence:
+  - service: securityspy.enable_schedule_preset
+    data:
+      preset_id: '2239136243'
+  mode: single
+lock_update_user_codes:
+  alias: Lock - Update User Codes
+  sequence:
+  - service: zwave_js.set_lock_usercode
+    data:
+      code_slot: '1'
+      usercode: '{{ states(''input_text.garage_side_door_lock_user_code_1'') }}'
+    target:
+      entity_id: lock.garage_side_door
+  mode: single

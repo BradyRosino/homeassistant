@@ -1,3 +1,0 @@
-platform: switch
-name: hadley_bedroom_ceiling
-entity_id: switch.hadley_bedroom_ceiling_light

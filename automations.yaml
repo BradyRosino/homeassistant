@@ -131,15 +131,24 @@
       - service: homeassistant.turn_off
         target:
           entity_id: input_boolean.master_bedroom_sleep_in
+        data: {}
     default:
     - service: switch.turn_off
       target:
         device_id: 544f9268e3d7d9021d3f36dd7606011e
+      data: {}
     - service: input_datetime.set_datetime
       target:
         entity_id: input_datetime.master_bedroom_wakeup_time
       data:
-        time: 07:00:00
+        time: 06:30:00
+    - condition: state
+      entity_id: input_boolean.coffee_autostart
+      state: 'on'
+    - type: turn_on
+      device_id: 90770ccd18c111eba96cc192cb4bd3c6
+      entity_id: switch.kitchen_coffee
+      domain: switch
   mode: single
 - id: '1623983039999'
   alias: Time - 8:00 AM - Reminder Emerson Guest Mode On
@@ -180,11 +189,12 @@
   - type: motion
     platform: device
     device_id: 907837c418c111ebbb6d91773cfacc14
-    entity_id: binary_sensor.guest_bathroom_motion_sensor_occupancy
+    entity_id: binary_sensor.downstairs_bathroom_motion_sensor_occupancy
     domain: binary_sensor
   condition: []
   action:
-  - service: switch.turn_on
+  - service: light.turn_on
+    data: {}
     target:
       device_id: b4c7eeefbfbbc9ed647d86634c56811a
   - delay:
@@ -192,7 +202,8 @@
       minutes: 30
       seconds: 0
       milliseconds: 0
-  - service: switch.turn_off
+  - service: light.turn_off
+    data: {}
     target:
       device_id: b4c7eeefbfbbc9ed647d86634c56811a
   mode: restart
@@ -225,25 +236,6 @@
     domain: light
     brightness_pct: 40
   mode: single
-- id: '1624013955762'
-  alias: Kitchen - Entry Door - Turn on Entry Light
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.kitchen_garage_entry_door
-    to: 'on'
-  condition:
-  - condition: device
-    type: is_off
-    device_id: 12c92d982386e012a24b1ef0cb73cc21
-    entity_id: switch.kitchen_closet_light
-    domain: switch
-  action:
-  - type: turn_on
-    device_id: 12c92d982386e012a24b1ef0cb73cc21
-    entity_id: switch.kitchen_closet_light
-    domain: switch
-  mode: single
 - id: '1624014307772'
   alias: Garage - Doors (entry or cover) Opened
   description: When garage doors are opened, turn on ceiling light if the sun is more
@@ -259,56 +251,29 @@
     device_id: 8181392f195211eb8537a1139f68f030
     entity_id: binary_sensor.kitchen_garage_door
     domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: 9aa48dcf318acd2f5428097bba221504
+    entity_id: binary_sensor.garage_access_door
+    domain: binary_sensor
   condition:
   - condition: template
     value_template: '{{ state_attr(''sun.sun'', ''elevation'') < -6 }}'
-  - condition: device
-    type: is_off
-    device_id: 06db30d13e58f7ad02951a3e0a4ce55a
-    entity_id: switch.garage_ceiling_light
-    domain: switch
   action:
   - type: turn_on
-    device_id: 06db30d13e58f7ad02951a3e0a4ce55a
+    device_id: 85ad3aaec37af4898d4ec21e8a189bb9
+    entity_id: switch.garage_ceiling_light
+    domain: switch
+  - delay:
+      hours: 0
+      minutes: 20
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: 85ad3aaec37af4898d4ec21e8a189bb9
     entity_id: switch.garage_ceiling_light
     domain: switch
   mode: single
-- id: '1624014478469'
-  alias: Garage - Doors (entry and cover) Closed
-  description: ''
-  trigger:
-  - type: not_opened
-    platform: device
-    device_id: 8181392f195211eb8537a1139f68f030
-    entity_id: binary_sensor.kitchen_garage_door
-    domain: binary_sensor
-    for:
-      hours: 0
-      minutes: 15
-      seconds: 0
-      milliseconds: 0
-  - platform: device
-    device_id: dbc501a633cfe42e27bed2f4665c75ea
-    domain: cover
-    entity_id: cover.garage
-    type: closed
-    for:
-      hours: 0
-      minutes: 15
-      seconds: 0
-      milliseconds: 0
-  condition:
-  - condition: device
-    type: is_on
-    device_id: 06db30d13e58f7ad02951a3e0a4ce55a
-    entity_id: switch.garage_ceiling_light
-    domain: switch
-  action:
-  - type: turn_off
-    device_id: 06db30d13e58f7ad02951a3e0a4ce55a
-    entity_id: switch.garage_ceiling_light
-    domain: switch
-  mode: restart
 - id: '1624014899053'
   alias: Garage Open while sun is down
   description: ''
@@ -357,7 +322,10 @@
     device_id: d6d7286c723a9d242b1ec4f8ab481bb2
     entity_id: binary_sensor.hadley_bedroom_door
     domain: binary_sensor
-  condition: []
+  condition:
+  - condition: state
+    entity_id: input_boolean.molly_maid_mode
+    state: 'off'
   action:
   - service: light.turn_on
     data:
@@ -381,16 +349,19 @@
       minutes: 30
       seconds: 0
       milliseconds: 0
-  condition: []
+  condition:
+  - condition: state
+    entity_id: input_boolean.molly_maid_mode
+    state: 'off'
   action:
   - service: homeassistant.turn_off
     target:
-      entity_id:
-      - light.hadley_bedroom_ceiling
       device_id:
       - 303b098c0487260b5a73d750133ef0d6
       - 917b4d901f6ba59c38caab54d9227cd8
       - c758225b96d9e897869f1351901cbec7
+      - 82ed6e62b039560ebb572e5485f8b2ba
+    data: {}
   mode: single
 - id: '1624018514582'
   alias: Hadley Bedroom - Door Closed
@@ -401,19 +372,21 @@
     device_id: d6d7286c723a9d242b1ec4f8ab481bb2
     entity_id: binary_sensor.hadley_bedroom_door
     domain: binary_sensor
-  condition: []
+  condition:
+  - condition: state
+    entity_id: input_boolean.molly_maid_mode
+    state: 'off'
   action:
   - type: turn_on
     device_id: 303b098c0487260b5a73d750133ef0d6
-    entity_id: switch.hadley_bedroom_floor_fan
+    entity_id: switch.hadley_bedroom_sound_machine
     domain: switch
   - service: light.turn_off
     target:
-      entity_id:
-      - light.hadley_bedroom_ceiling
       device_id:
       - c758225b96d9e897869f1351901cbec7
       - 917b4d901f6ba59c38caab54d9227cd8
+      - 82ed6e62b039560ebb572e5485f8b2ba
     data:
       transition: 3
   mode: single
@@ -429,6 +402,9 @@
   condition:
   - condition: state
     entity_id: input_boolean.emerson_bedroom_guest
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.molly_maid_mode
     state: 'off'
   action:
   - service: light.turn_on
@@ -452,6 +428,9 @@
   - condition: state
     entity_id: input_boolean.emerson_bedroom_guest
     state: 'off'
+  - condition: state
+    entity_id: input_boolean.molly_maid_mode
+    state: 'off'
   action:
   - service: light.turn_off
     data:
@@ -462,13 +441,9 @@
       device_id:
       - 8a1f032e17016dbcd4e91768396ae9ac
   - service: switch.turn_on
+    data: {}
     target:
-      entity_id: switch.emerson_bedroom_floor_fan
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 3
-      milliseconds: 0
+      entity_id: switch.emerson_bedroom_sound_machine
   - service: light.turn_off
     data:
       transition: 5
@@ -493,6 +468,9 @@
   - condition: state
     entity_id: input_boolean.emerson_bedroom_guest
     state: 'off'
+  - condition: state
+    entity_id: input_boolean.molly_maid_mode
+    state: 'off'
   action:
   - service: homeassistant.turn_off
     target:
@@ -512,7 +490,10 @@
       node_id: 47
       property_key: '003'
       value: KeyPressed
-  condition: []
+  condition:
+  - condition: state
+    entity_id: input_boolean.molly_maid_mode
+    state: 'off'
   action:
   - service: light.turn_on
     target:
@@ -649,13 +630,34 @@
     domain: switch
   mode: single
 - id: '1624041682364'
-  alias: Presence - Guest Mode Changed Notification
-  description: ''
+  alias: Presence - Guest Mode Changed
+  description: Update location & notify
   trigger:
   - platform: state
-    entity_id: person.guest
+    entity_id: input_boolean.presence_guest
+    id: guest-changed
+  - platform: homeassistant
+    event: start
+    id: hass-start
   condition: []
   action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.presence_guest
+        state: 'on'
+      sequence:
+      - service: device_tracker.see
+        data:
+          location_name: home
+          dev_id: hass_guest
+    default:
+    - service: device_tracker.see
+      data:
+        dev_id: hass_guest
+        location_name: not_home
+  - condition: trigger
+    id: guest-changed
   - service: notify.mobile_app_bradys_iphone
     data:
       title: Guest Mode
@@ -691,20 +693,25 @@
   - service: light.turn_off
     target:
       entity_id: all
+    data: {}
   - service: switch.turn_off
     target:
       entity_id:
       - switch.emerson_bedroom_floor_fan
       - switch.hadley_bedroom_floor_fan
+    data: {}
   - service: media_player.media_stop
     target:
       entity_id: all
+    data: {}
   - service: media_player.turn_off
     target:
       entity_id: all
+    data: {}
   - service: fan.turn_off
     target:
       entity_id: all
+    data: {}
   - choose:
     - conditions:
       - condition: state
@@ -716,6 +723,7 @@
           entity_id:
           - light.outside_driveway
           - light.outside_front_porch
+        data: {}
     default: []
   - choose:
     - conditions:
@@ -728,13 +736,9 @@
           message: House became empty and the garage is open!
           title: Home Status ALERT
     default: []
-  - service: switch.turn_on
-    target:
-      entity_id:
-      - switch.actions_hadley_camera
-      - switch.actions_emerson_camera
-      - switch.record_motion_hadley_camera
-      - switch.record_motion_emerson_camera
+  - service: securityspy.enable_schedule_preset
+    data:
+      preset_id: '3403732051'
   mode: restart
 - id: '1624048856751'
   alias: Presence - Home became occupied
@@ -750,13 +754,9 @@
       entity_id: climate.living_room
     data:
       preset_mode: home
-  - service: switch.turn_off
-    target:
-      entity_id:
-      - switch.actions_emerson_camera
-      - switch.record_motion_emerson_camera
-      - switch.actions_hadley_camera
-      - switch.record_motion_hadley_camera
+  - service: securityspy.enable_schedule_preset
+    data:
+      preset_id: '2239136243'
   mode: single
 - id: '1634589697353'
   alias: EMERGENCY - Kid Bathroom Left Sink Water Detected
@@ -793,54 +793,6 @@
           seconds: 0
           milliseconds: 0
   mode: restart
-- id: '1635170212533'
-  alias: Brady Office - Cube - Rotate Right
-  description: ''
-  trigger:
-  - platform: device
-    domain: mqtt
-    device_id: 9077998b18c111eb960a27cecc7c5cec
-    type: action
-    subtype: rotate_right
-    discovery_id: 0x00158d00032c9e2d action_rotate_right
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: state
-        entity_id: sun.sun
-        state: above_horizon
-      sequence:
-      - service: scene.turn_on
-        target:
-          entity_id: scene.brady_office_day_work
-        data:
-          transition: 3
-    default:
-    - service: scene.turn_on
-      target:
-        entity_id: scene.brady_office_late_night
-      data:
-        transition: 5
-  mode: single
-- id: '1635170263988'
-  alias: Brady Office - Cube - Rotate Left
-  description: ''
-  trigger:
-  - platform: device
-    domain: mqtt
-    device_id: 9077998b18c111eb960a27cecc7c5cec
-    type: action
-    subtype: rotate_left
-    discovery_id: 0x00158d00032c9e2d action_rotate_left
-  condition: []
-  action:
-  - service: light.turn_off
-    target:
-      area_id: afe28a05191011ebbbdf75a2e62360bd
-    data:
-      transition: 5
-  mode: single
 - id: '1637767478426'
   alias: Time - Sunset - Turn On Christmas Lights
   description: ''
@@ -906,7 +858,10 @@
       brightness: 255
       kelvin: 3500
     target:
-      entity_id: light.group_family_room_bookshelf_lights
+      entity_id:
+      - light.family_room_couch
+      - light.group_family_room_bookshelf_lights
+      - light.family_room_chair
   mode: single
 - id: '1637774743021'
   alias: Master Bedroom Closet Motion
@@ -1043,45 +998,8 @@
       - e6eaf19dee09afbfc5e496e50657df70
       - 07f9f0e67ba526ab9116941b9cc47246
   mode: single
-- id: '1638209526136'
-  alias: Brady Office - Sonos Started Playing
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: media_player.brady_office_sonos
-    to: playing
-  condition: []
-  action:
-  - service: remote.send_command
-    target:
-      entity_id: remote.brady_office_remote_remote
-    data:
-      device: desk_speaker
-      command: input_optical
-  mode: single
-- id: '1638209723331'
-  alias: Brady Office - Sonos Stopped
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: media_player.brady_office_sonos
-    from: playing
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 5
-      milliseconds: 0
-  condition: []
-  action:
-  - service: remote.send_command
-    target:
-      entity_id: remote.brady_office_remote_remote
-    data:
-      device: desk_speaker
-      command: input_line1
-  mode: single
 - id: '1639773730245'
-  alias: New Automation
+  alias: Emerson Bedroom - Button Press
   description: ''
   trigger:
   - platform: device
@@ -1112,4 +1030,167 @@
       device_id: 58c0ffa806bf215b197a4543a754154a
       entity_id: light.emerson_bedroom_nightstand
       domain: light
+  mode: single
+- id: '1645102061893'
+  alias: Time - Kitchen - Coffee Autostart
+  description: ''
+  trigger:
+  - platform: time
+    at: input_datetime.coffee_autostart_time
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  - condition: state
+    entity_id: input_boolean.coffee_autostart
+    state: 'on'
+  - condition: state
+    entity_id: binary_sensor.people_home
+    state: 'on'
+  - condition: state
+    entity_id: input_boolean.master_bedroom_sleep_in
+    state: 'off'
+  action:
+  - type: turn_on
+    device_id: 90770ccd18c111eba96cc192cb4bd3c6
+    entity_id: switch.kitchen_coffee
+    domain: switch
+  mode: single
+- id: '1646076858875'
+  alias: Radarr - New Movie
+  description: ''
+  trigger:
+  - platform: webhook
+    webhook_id: radarr-new-movie
+  condition: []
+  action:
+  - service: notify.mobile_app_bradys_iphone
+    data:
+      message: '{{ trigger.json.movie.title }} ({{ trigger.json.movie.year }})'
+      title: Radarr
+      data:
+        url: https://www.themoviedb.org/movie/{{ trigger.json.movie.tmdbid }}
+  mode: single
+- id: '1646174375301'
+  alias: EMERGENCY - Sump Level Alarm
+  description: ''
+  trigger:
+  - type: moist
+    platform: device
+    device_id: c82757fac1d12c129a303a5a5afdbcdf
+    entity_id: binary_sensor.sump_level_alarm
+    domain: binary_sensor
+  condition: []
+  action:
+  - repeat:
+      until:
+      - type: is_not_moist
+        condition: device
+        device_id: c82757fac1d12c129a303a5a5afdbcdf
+        entity_id: binary_sensor.sump_level_alarm
+        domain: binary_sensor
+      sequence:
+      - service: notify.mobile_app_bradys_iphone
+        data:
+          data:
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 1
+          title: Sump Level Alarm
+          message: Sump Level Alarm is reporting WET, check for sump pump failure!
+      - delay:
+          hours: 0
+          minutes: 1
+          seconds: 0
+          milliseconds: 0
+  mode: single
+- id: '1651199090193'
+  alias: Garage access door - lock if left unlocked for 5 minutes
+  description: ''
+  trigger:
+  - type: not_opened
+    platform: device
+    device_id: 9aa48dcf318acd2f5428097bba221504
+    entity_id: binary_sensor.garage_access_door
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  condition:
+  - condition: device
+    device_id: 14a2404bd194ea1815fcda8a305be77e
+    domain: lock
+    entity_id: lock.garage_access_door
+    type: is_unlocked
+  action:
+  - device_id: 14a2404bd194ea1815fcda8a305be77e
+    domain: lock
+    entity_id: lock.garage_access_door
+    type: lock
+  mode: single
+- id: '1651371609571'
+  alias: Home Assistant Startup - Set Theme
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  condition: []
+  action:
+  - service: frontend.set_theme
+    data:
+      name: Google Theme
+  mode: single
+- id: '1651505831286'
+  alias: Locks - User Code Modified
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_text.garage_side_door_lock_user_code_1
+    id: '1'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.to_state.state|regex_match("^\d{1,6}$") }}'
+      sequence:
+      - service: zwave_js.set_lock_usercode
+        data:
+          code_slot: '{{ trigger.id }}'
+          usercode: '{{ trigger.to_state.state }}'
+        target:
+          entity_id: lock.garage_side_door
+      - service: notify.mobile_app_bradys_iphone
+        data:
+          title: Lock Manager
+          message: User code {{ trigger.id }} modified
+    default:
+    - service: input_text.set_value
+      data:
+        value: '{{ trigger.from_state.state }}'
+      target:
+        entity_id: '{{ trigger.entity_id }}'
+  mode: single
+- id: '1651510204974'
+  alias: Home Assistant Start - Lock Manager
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  condition: []
+  action:
+  - service: zwave_js.set_config_parameter
+    data:
+      parameter: userIdStatus
+      value: '2'
+      bitmask: '1'
+    target:
+      device_id: 14a2404bd194ea1815fcda8a305be77e
   mode: single

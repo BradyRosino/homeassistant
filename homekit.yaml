@@ -4,13 +4,13 @@ filter:
     - light
     - fan
     - cover
-    - lock
+    - climate
   include_entities:
     - switch.master_bedroom_sound_machine
-    - switch.master_bathroom_shower_fan
-    - switch.emerson_bedroom_floor_fan
-    - switch.hadley_bedroom_floor_fan
+    - switch.emersons_bedroom_sound_machine
+    - switch.hadleys_bedroom_sound_machine
     - switch.kitchen_coffee
+    - switch.family_room_christmas_tree
   exclude_entities:
     - light.brady_office_couch_left
     - light.brady_office_couch_right
@@ -19,7 +19,7 @@ filter:
     - light.brady_office_desk_old
     - light.family_room_bookshelf_left
     - light.family_room_bookshelf_right
-    - lock.boltchecked_garage_access_door
+    - light.brady_office_lights
   exclude_entity_globs:
     - light.*_huegroup
     - light.*_spotlight
